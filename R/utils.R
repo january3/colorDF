@@ -33,6 +33,8 @@
 #' Colorful data frames store the styles in the `.style` attribute of the
 #' data frame object. This attribute is a list with a number of keywords:
 #' 
+#' * fg, bg, decoration: formatting styles to be applied to the whole table
+#'   (see "Formatting styles" below)
 #' * row.names, col.names, interleave: formatting styles for row names, table header and
 #'   every second line in the table. If these elements are NULL, no styles
 #'   will be applied. See "Formatting styles" below.
@@ -45,16 +47,21 @@
 #'   be considered to be a p-value and styled accordingly.
 #' * type.styles: a list mapping column types to formatting styles. See "Column types"
 #'   below.
+#' * fixed.width: if not NULL, all columns have the same width
+#' * sep: string separating the columns (default: │)
+#' * tibble.style: if not NULL, cut off columns that do not fit the width
 #'
-#' @section Formatting styles
+#' @section Formatting styles:
 #'
 #' Each formatting style is a list describing style of the formatting and
 #' coloring the text elements. Following elements of that list are recognized:
 #'
 #'  * fg, bg: foreground and background colors specified as R name (use
 #'    `colors()` to get available colors) or HTML hexadicimal code 
-#'  * fg_sign, fg_ns: for p-values, foreground colors for significant / not
-#'    significant values, respectively
+#'  * fg_sign: for p-values, foreground color for significant 
+#'    values
+#'  * fg_true, fg_false: foreground colors for logical vectors
+#'  * fg_neg: for numeric values, foreground color for negative values
 #'  * is.pval: whether the values are to be treated as p-values
 #'  * is.numeric: whether the values are to be treated as numeric
 #'  * align: how the values should be aligned (right, left or center)
@@ -62,7 +69,7 @@
 #'  * decoration: a character vector which may include the following key
 #'    words: inverse, bold, italic
 #'
-#' @section Column types
+#' @section Column types:
 #' 
 #' Rather than directly assigning a style to a column (which is possible
 #' using the `col.styles` element) it is preferable to change a style
@@ -81,7 +88,7 @@
 #' @param x a colorful data frame
 #' @param element element or elements of the style
 #' @param value one or more values to set
-#' @examples
+#' @example
 #' df <- as.colorDF(mtcars)
 #'
 #' ## row names should be red on yellow background (yikes!)
@@ -145,7 +152,12 @@ col_type <- function(x, cols=NULL) {
 
 .catf <- function(x, ...) cat(sprintf(x, ...))
 
-
+#' Remove the colorful dataframe style attribute
+#' 
+#' Remove the colorful dataframe style attribute
+#' @return colorless data frame
+#' @param x a colorful dataframe 
+#' @export
 remove_df_style <- function(x) {
   attr(x, ".style") <- NULL
   x

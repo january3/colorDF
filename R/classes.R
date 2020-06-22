@@ -1,6 +1,8 @@
-.getslots <- function(cols.w, width) {
+.getslots <- function(x, width) {
 
-  cols.w <- cols.w + 1
+  cols.w <- map_int(1:length(x), ~  max(nchar(strip_style(x[[.x]]))))
+
+#  cols.w <- cols.w + 1
   slots <- rep(0, length(cols.w))
   screen <- cumsum(cols.w) 
   nsl <- floor(sum(cols.w)/width)
@@ -18,14 +20,14 @@
   return(slots + 1)
 }
 
-.make_header <- function(c.names, row.names.w, style) {
-  if(!is.null(c.names)) {
-      header <- paste(
-        c(col_align("", width=row.names.w), c.names),
-        collapse=" "
-      )
-    header <- format_col(header, style=style$col.names)
-    return(paste0(header, "\n"))
+.make_header <- function(c.names.formatted, row.names.w, style) {
+if(!is.null(c.names.formatted)) {
+    header <- paste(c.names.formatted, collapse="")
+    header <- format_col(header, style=style$col.names, format=FALSE, prefix="")
+    header <- format_col(header, style=list(fg=style$fg, bg=style$bg, decoration=style$decoration), format=FALSE, prefix="")
+    rnh    <- format_col("", style=style$col.names, col_width=row.names.w, prefix="")
+    header <- paste0(rnh, header, "\n")
+    return(header)
   } else {
     return("")
   }
@@ -45,19 +47,26 @@
 
 ## formatting columns: alignment, digits etc (no color yet)
 ## returns the data frame with attribute cols_w set to column widths
-.format_cols <- function(x, digits, c.names, ctypes, col_styles) {
+.format_cols <- function(x, digits, c.names, ctypes, col_styles, df_style) {
+
 
   nx  <- length(x)
 
-  x <- map(1:nx, ~ {
-    #ret <- col_styles[[.]](x[[.x]], c.names[.])
+  cols.w <- NULL
 
-    #ret <- do.call(format_col, c(list(x=x[[.x]], col_name=c.names[.]), col_styles[[.]]))
-    ret <- format_col(x=x[[.x]], col_name=c.names[.], style=col_styles[[.]])
+  if(!is.null(df_style$fixed.width)) {
+    tmp <- map(1:nx, ~ {
+      ret <- format_col(x=x[[.x]], col_name=c.names[.], style=col_styles[[.]], df_style=df_style)
+    })
+    cols.w <- max(map_int(tmp, ~ attr(., ".width")))
+  }
+
+  x <- map(1:nx, ~ {
+    ret <- format_col(x=x[[.x]], col_name=c.names[.], style=col_styles[[.]], df_style=df_style, col_width=cols.w)
   })
 
-  cols.w <- map(x, ~ attr(., ".width"))
-  attr(x, "cols_w") <- cols.w
+  cols.w <- map_int(x, ~ attr(., ".width"))
+  attr(x, ".width") <- cols.w
 
   return(x)
 }
@@ -116,7 +125,7 @@
       ret <- style$data.styles$default
     } else {
       # empty style
-      ret <- create_col_style()
+      ret <- list()
     }
     return(ret)
   })
@@ -128,8 +137,16 @@
 #'
 #' Print method for colorful data frames
 #' @param n Number of rows to show (default=20, use Inf to show all)
+#' @param x a colorful data frame (object with class colorDF)
+#' @param width number of characters that the data frame should span on output
+#' @param digits number of significant digits to show (see [format()])
+#' @param row.names if TRUE (default), row names will be shown on output
+#' @param highlight a logical vector indicating which rows to highlight
+#' @param ... further arguments are ignored
 #' @import crayon
-#' @importFrom purrr map
+#' @importFrom purrr map map_int map_chr
+#' @importFrom utils head
+#' @seealso [df_style()] on how to modify colorful data frames
 #' @export
 print.colorDF <- function(x, n=20, width=getOption("width"), 
   digits=getOption("digits"), row.names=TRUE, 
@@ -159,57 +176,83 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
 
   ## format columns
   col_styles <- .get_column_styles(x, style, c.names, ctypes)
-  x <- .format_cols(x, digits, c.names, ctypes, col_styles)
-  #cols.w <- attr(x, "cols_w")
-  if(!is.null(c.names)) {
-    cols.w <- map_int(1:length(x), ~  max(nchar(c(c.names[.x], strip_style(x[[.x]])))))
-  } else {
-    cols.w <- map_int(1:length(x), ~  max(nchar(strip_style(x[[.x]]))))
-  }
+  cols.w <- NULL
 
+  x <- .format_cols(x, digits, c.names, ctypes, col_styles, df_style=style)
+
+  cols.w <- attr(x, ".width") ## cols width without separator (prefix)
+  cols.w.real <- map_int(x, ~  max(nchar(strip_style(.x))))
 
   ## disregard width if not sufficient to show row names + largest column
-  if(max(cols.w) > width) { width <- max(cols.w) + row.names.w }
+  if(max(cols.w.real) > width) { 
+    width <- max(cols.w)
+    warning(sprintf("Width to narrow, increasing to %d", max(cols.w) + row.names.w))
+  }
 
-  .catf(red $ italic ("width=%d\n"), width)
+  .catf(red $ italic ("width=%d (full=%d)\n"), width, width + row.names.w)
 
   ## split the data frame into chunks fitting the width
-  slots <- .getslots(cols.w, width)
+  slots <- .getslots(x, width)
 
   ## align column names (no need to worry about NULL)
-  c.names.formatted <- col_align(c.names, cols.w, align=style$col.names$align)
+  #c.names.formatted <- col_align(c.names, cols.w, align=style$col.names$align)
+  c.names.formatted <- format_col(c.names, col_width=cols.w, df_style=style)
+
 
   if(!is.null(style$row.names)) {
-    r.names <- format_col(r.names, style=style$row.names)
+    r.names <- format_col(r.names, style=style$row.names, prefix="", format=FALSE)
   }
 
   ## color columns according to style
 
-  for(sl in 1:max(slots)) {
+  nslots <- max(slots)
+
+  if(!is.null(style$tibble.style)) { nslots <- 1 }
+
+  for(sl in 1:nslots) {
     cat(.make_header(c.names.formatted[ slots == sl ], row.names.w, style))
 
     rows <- map_chr(1:n, ~ {
       i <- .x
-      paste(map_chr(x[ slots == sl ], ~ .x[[i]]), collapse=" ")
+      paste(map_chr(x[ slots == sl ], ~ .x[[i]]), collapse="")
     })
 
     rows <- paste0(r.names, rows)
 
+    if(!is.null(highlight)) rows[ highlight ] <- inverse(rows[ highlight ])
+
     if(!is.null(style$interleave)) {
       sel <- seq(2, n, by=2)
-      rows[ sel ] <- format_col(rows[sel], style=style$interleave, format=FALSE)
+      rows[ sel ] <- format_col(rows[sel], style=style$interleave, format=FALSE, prefix="")
     }
 
-    if(!is.null(highlight)) rows[ highlight ] <- inverse(rows[ highlight ])
+    ## global data frame style
+    rows <- format_col(rows, style=list(fg=style$fg, bg=style$bg, decoration=style$decoration), format=FALSE, prefix="")
 
     cat(paste(rows, collapse="\n"))
     cat("\n\n")
   }
 
+  if(!is.null(style$tibble.style) && any(slots != 1)) { 
+    .catf(silver $ italic ("%d more columns"), sum(slots != 1))
+    if(!is.null(c.names)) {
+      .catf(silver $ italic(": %s"), 
+        paste(c.names[ slots != 1 ], collapse=", "))
+    }
+    cat("\n")
+  }
+
 
 }
 
-
+#' Make a dataframe colorful
+#'
+#' Make a dataframe colorful
+#' @param x a data frame or similar object (e.g. tibble)
+#' @param ... further arguments are ignored
+#' @return a colorful data frame – identical object but with the `.style`
+#'         attribute set.
+#' @seealso [df_style()] on how to modify style of the colorful data frame
 #' @export
 as.colorDF <- function(x, ...) {
 
