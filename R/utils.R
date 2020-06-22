@@ -49,6 +49,7 @@
 #'   below.
 #' * fixed.width: if not NULL, all columns have the same width
 #' * sep: string separating the columns (default: │)
+#' * digits: how many digits to use
 #' * tibble.style: if not NULL, cut off columns that do not fit the width
 #'
 #' @section Formatting styles:
@@ -62,10 +63,12 @@
 #'    values
 #'  * fg_true, fg_false: foreground colors for logical vectors
 #'  * fg_neg: for numeric values, foreground color for negative values
+#'  * fg_na: color for NA values
 #'  * is.pval: whether the values are to be treated as p-values
 #'  * is.numeric: whether the values are to be treated as numeric
 #'  * align: how the values should be aligned (right, left or center)
 #'  * sign.thr: for p-values, the threshold of significance
+#'  * digits: how many digits to use
 #'  * decoration: a character vector which may include the following key
 #'    words: inverse, bold, italic
 #'
@@ -88,7 +91,8 @@
 #' @param x a colorful data frame
 #' @param element element or elements of the style
 #' @param value one or more values to set
-#' @example
+#' @seealso [print.colorDF()] on printing options
+#' @examples
 #' df <- as.colorDF(mtcars)
 #'
 #' ## row names should be red on yellow background (yikes!)
@@ -96,9 +100,9 @@
 #'
 #' ## example of assigning multiple values in one assignment:
 #' df_style(df) <- list(interleave=list(fg="#FFFFFF", bg="blue"),
-#'                      row.names=list(fg="blue", bg="#FFFF00"), 
-#'                      col.names=list(bg="#FFFFFF", fg="#FF00FF", 
-#'                      decoration=c("bold", "italic"))
+#'                   row.names=list(fg="blue", bg="#FFFF00"), 
+#'                   col.names=list(bg="#FFFFFF", fg="#FF00FF", 
+#'                                  decoration=c("bold", "italic")))
 #'
 #' @export
 df_style <- function(x, element) {

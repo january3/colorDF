@@ -23,9 +23,9 @@
 .make_header <- function(c.names.formatted, row.names.w, style) {
 if(!is.null(c.names.formatted)) {
     header <- paste(c.names.formatted, collapse="")
-    header <- format_col(header, style=style$col.names, format=FALSE, prefix="")
-    header <- format_col(header, style=list(fg=style$fg, bg=style$bg, decoration=style$decoration), format=FALSE, prefix="")
-    rnh    <- format_col("", style=style$col.names, col_width=row.names.w, prefix="")
+    header <- format_col(header, style=style[["col.names"]], format=FALSE, prefix="")
+    header <- format_col(header, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
+    rnh    <- format_col("", style=style[["col.names"]], col_width=row.names.w, prefix="")
     header <- paste0(rnh, header, "\n")
     return(header)
   } else {
@@ -45,16 +45,16 @@ if(!is.null(c.names.formatted)) {
   return(r.names)
 }
 
-## formatting columns: alignment, digits etc (no color yet)
-## returns the data frame with attribute cols_w set to column widths
-.format_cols <- function(x, digits, c.names, ctypes, col_styles, df_style) {
+## formatting columns: alignment style etc
+## returns the data frame with attribute .width set to column widths
+.format_cols <- function(x, c.names, ctypes, col_styles, df_style) {
 
 
   nx  <- length(x)
 
   cols.w <- NULL
 
-  if(!is.null(df_style$fixed.width)) {
+  if(!is.null(df_style[["fixed.width"]])) {
     tmp <- map(1:nx, ~ {
       ret <- format_col(x=x[[.x]], col_name=c.names[.], style=col_styles[[.]], df_style=df_style)
     })
@@ -76,7 +76,7 @@ if(!is.null(c.names.formatted)) {
 .autostyle <- function(c.names, ctypes, style) {
   if(is.null(c.names)) return(ctypes)
 
-  st.n <- names(style$data.styles)
+  st.n <- names(style[["data.styles"]]) %||% list()
 
   if("pval" %in% st.n) {
     sel <- grepl("^(p.value|pvalue|pval|qval|qvalue|p|q)$", c.names, ignore.case=TRUE)
@@ -84,7 +84,7 @@ if(!is.null(c.names.formatted)) {
   }
 
   if("identifier" %in% st.n) {
-    sel <- grepl("^(id|identifier)$", c.names, ignore.case=TRUE)
+    sel <- grepl("^(id|identifier)$", c.names, ignore.case=TRUE) | grepl("ID$", c.names)
     ctypes[sel] <- "identifier"
   }
 
@@ -100,15 +100,15 @@ if(!is.null(c.names.formatted)) {
 
   ## automatically guess column type from column name
   ## (e.g. "pval" will probably be a p value)
-  if(style$autoformat) ctypes <- .autostyle(c.names, ctypes, style)
+  if(!is.null(style[["autoformat"]])) ctypes <- .autostyle(c.names, ctypes, style)
 
   ## if column style has been defined in `style$col.types`, then 
   ## we use that instead
-  if(!is.null(c.names) && !is.null(style$col.types)) {
-    columns.known <- names(style$col.types)
-    sel <- columns.known %in% c.names & style$col.types %in% names(style$data.styles)
+  if(!is.null(c.names) && !is.null(style[["col.types"]])) {
+    columns.known <- names(style[["col.types"]])
+    sel <- columns.known %in% c.names & style[["col.types"]] %in% names(style[["data.styles"]])
     for(i in which(sel)) {
-      ctypes[ c.names == columns.known[i] ] <- style$col.types[i]
+      ctypes[ c.names == columns.known[i] ] <- style[["col.types"]][i]
     }
   }
  
@@ -118,11 +118,11 @@ if(!is.null(c.names.formatted)) {
     ret <- x[[.]]
 
     # style defined for this column type
-    if(ct %in% names(style$data.styles)) {
-      ret <- style$data.styles[[ct]]
+    if(ct %in% names(style[["data.styles"]])) {
+      ret <- style[["data.styles"]][[ct]]
       # default style defined in `style`
-    } else if(!is.null(style$data.styles$default)) {
-      ret <- style$data.styles$default
+    } else if(!is.null(style[["data.styles"]][["default"]])) {
+      ret <- style[["data.styles"]][["default"]]
     } else {
       # empty style
       ret <- list()
@@ -136,10 +136,11 @@ if(!is.null(c.names.formatted)) {
 #' Print method for colorful data frames
 #'
 #' Print method for colorful data frames
+#'
+#' 
 #' @param n Number of rows to show (default=20, use Inf to show all)
 #' @param x a colorful data frame (object with class colorDF)
 #' @param width number of characters that the data frame should span on output
-#' @param digits number of significant digits to show (see [format()])
 #' @param row.names if TRUE (default), row names will be shown on output
 #' @param highlight a logical vector indicating which rows to highlight
 #' @param ... further arguments are ignored
@@ -149,7 +150,7 @@ if(!is.null(c.names.formatted)) {
 #' @seealso [df_style()] on how to modify colorful data frames
 #' @export
 print.colorDF <- function(x, n=20, width=getOption("width"), 
-  digits=getOption("digits"), row.names=TRUE, 
+  row.names=TRUE, 
   highlight=NULL,
   ...) {
 
@@ -178,7 +179,7 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
   col_styles <- .get_column_styles(x, style, c.names, ctypes)
   cols.w <- NULL
 
-  x <- .format_cols(x, digits, c.names, ctypes, col_styles, df_style=style)
+  x <- .format_cols(x, c.names, ctypes, col_styles, df_style=style)
 
   cols.w <- attr(x, ".width") ## cols width without separator (prefix)
   cols.w.real <- map_int(x, ~  max(nchar(strip_style(.x))))
@@ -189,7 +190,7 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
     warning(sprintf("Width to narrow, increasing to %d", max(cols.w) + row.names.w))
   }
 
-  .catf(red $ italic ("width=%d (full=%d)\n"), width, width + row.names.w)
+  #.catf(red $ italic ("width=%d (full=%d)\n"), width, width + row.names.w)
 
   ## split the data frame into chunks fitting the width
   slots <- .getslots(x, width)
@@ -199,15 +200,15 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
   c.names.formatted <- format_col(c.names, col_width=cols.w, df_style=style)
 
 
-  if(!is.null(style$row.names)) {
-    r.names <- format_col(r.names, style=style$row.names, prefix="", format=FALSE)
+  if(!is.null(style[["row.names"]])) {
+    r.names <- format_col(r.names, style=style[["row.names"]], prefix="", format=FALSE)
   }
 
   ## color columns according to style
 
   nslots <- max(slots)
 
-  if(!is.null(style$tibble.style)) { nslots <- 1 }
+  if(!is.null(style[["tibble.style"]])) { nslots <- 1 }
 
   for(sl in 1:nslots) {
     cat(.make_header(c.names.formatted[ slots == sl ], row.names.w, style))
@@ -221,19 +222,19 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
 
     if(!is.null(highlight)) rows[ highlight ] <- inverse(rows[ highlight ])
 
-    if(!is.null(style$interleave)) {
+    if(!is.null(style[["interleave"]])) {
       sel <- seq(2, n, by=2)
-      rows[ sel ] <- format_col(rows[sel], style=style$interleave, format=FALSE, prefix="")
+      rows[ sel ] <- format_col(rows[sel], style=style[["interleave"]], format=FALSE, prefix="")
     }
 
     ## global data frame style
-    rows <- format_col(rows, style=list(fg=style$fg, bg=style$bg, decoration=style$decoration), format=FALSE, prefix="")
+    rows <- format_col(rows, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
 
     cat(paste(rows, collapse="\n"))
     cat("\n\n")
   }
 
-  if(!is.null(style$tibble.style) && any(slots != 1)) { 
+  if(!is.null(style[["tibble.style"]]) && any(slots != 1)) { 
     .catf(silver $ italic ("%d more columns"), sum(slots != 1))
     if(!is.null(c.names)) {
       .catf(silver $ italic(": %s"), 
