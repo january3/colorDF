@@ -262,7 +262,7 @@ colorDF <- function(x, theme="default") {
   x <- try(as.data.frame(x), silent=TRUE)
 
   if(inherits(x, "try-error")) {
-    stop("Object cannot be converted to a data frame")
+    stop("colorDF: x does not seem to be a data frame-like object")
   }
 
   class(x) <- c("colorDF", class(x))

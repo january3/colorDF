@@ -133,9 +133,8 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
   }
 
   ## finally, return default style
-  return(.themes[["default"]])
-
-
+  default <- getOption("colorDF_theme") %OR% .themes[[1]]
+  return(.themes[[default]])
 }
 
 
