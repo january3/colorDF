@@ -1,5 +1,5 @@
-`%||%` <- function(x, y) {
-  if(is.null(x) || is.na(x)) x <- y
+`%OR%` <- function(x, y) {
+  if(is.null(x) || length(x) == 0 || (length(x) == 1 && is.na(x))) x <- y
   return(x)
 }
 
@@ -7,7 +7,7 @@
 #' @rdname df_style
 #' @export
 `df_style<-` <- function(x, element=NULL, value) {
-  style <- attr(x, ".style") %||% list()
+  style <- attr(x, ".style") %OR% list()
 
   if(length(element) > 1) {
     stop("Cannot set more than one element")

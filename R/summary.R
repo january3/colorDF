@@ -45,8 +45,21 @@ get_summary <- function(x, class) {
 
 
 #' Meaningful summary of data frames
+#'
+#' Meaningful summary of data frames
+#' 
+#' 
+#'
+#' While this function is a summary method for objects of the colorDF
+#' class, it can also be applied to any other dataframe-like object.
+#' @return A colorful data frame of class colorDF containing useful
+#'         information on a dataframe-like object.
+#' @param object a data frame (possibly a color data frame)
+#' @param ... ignored
+#' @importFrom stats quantile
 #' @export
-summary.colorDF <- function(x) {
+summary.colorDF <- function(object, ...) {
+  x <- object
   if(!is.data.frame(x)) { stop("x must be a data frame") }
 
   cnames <- colnames(x)

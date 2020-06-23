@@ -15,7 +15,7 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
   if(is.null(style)) style <- list()
   if(!is.numeric(x)) { style$is.numeric <- NULL ; style$is.pval <- NULL } 
   if(is.null(col_name)) { col_name <- "" }
-  digits <- style$digits %||% df_style$digits %||% getOption("digits")
+  digits <- style$digits %OR% df_style$digits %OR% getOption("digits")
   if(!is.null(df_style$sep)) { prefix <- df_style$sep }
 
   x.ret <- as.character(x)
@@ -28,11 +28,12 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
     } 
   }
 
+  x.ret[is.na(x.ret)] <- "NA"
 
-  if(is.null(col_width)) { col_width <- max(nchar(c(col_name, x.ret))) }
+  if(is.null(col_width)) { col_width <- max(nchar(c(col_name, x.ret)), na.rm=TRUE) }
   if(format)             { x.ret <- col_align(x.ret, width=col_width, align=style$align) }
 
-  na <- style$fg_na %||% df_style$fg_na
+  na <- style$fg_na %OR% df_style$fg_na
   if(any(is.na(x)) && !is.null(na)) {
     na.style <- make_style(na)
     x.ret[ is.na(x) ] <- na.style(x.ret[is.na(x)])
@@ -48,6 +49,7 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
     sel <- !is.na(x) & x < 0
     x.ret[sel] <- fg.style(x.ret[sel])
   }
+
 
   if(is.logical(x)) {
 
@@ -110,27 +112,30 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
 }
 
 ## return 
-.get_style <- function(x=NULL, style=NULL) {
+.get_style <- function(x=NULL, style=NULL, theme=NULL) {
 
+  ## if x and x has a style, return it
+  if(!is.null(x)) {
+    .st <- attr(x, ".style")
+    if(!is.null(.st)) { return(.st) }
+  }
+
+  ## otherwise, maybe style has been provided
   if(!is.null(style)) return(style)
 
-  ncol <- num_colors()
-
-  if(ncol == 256) {
-    .default_style <- .default_style_256
-  } else {
-    .default_style <- .default_style_8
+  ## or theme
+  if(!is.null(theme)) {
+    if(!is.null(.themes[[theme]])) {
+      return(.themes[[theme]])
+    } else {
+      warning(sprintf("No such theme: %s", theme))
+    }
   }
 
-  if(is.null(x)) {
-    return(.default_style)
-  }
+  ## finally, return default style
+  return(.themes[["default"]])
 
-  style <- attr(x, ".style")
-  if(is.null(style)) {
-    style <- .default_style
-  }
-  style
+
 }
 
 

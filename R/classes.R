@@ -76,7 +76,7 @@ if(!is.null(c.names.formatted)) {
 .autostyle <- function(c.names, ctypes, style) {
   if(is.null(c.names)) return(ctypes)
 
-  st.n <- names(style[["data.styles"]]) %||% list()
+  st.n <- names(style[["data.styles"]]) %OR% list()
 
   if("pval" %in% st.n) {
     sel <- grepl("^(p.value|pvalue|pval|qval|qvalue|p|q)$", c.names, ignore.case=TRUE)
@@ -145,7 +145,7 @@ if(!is.null(c.names.formatted)) {
 #' @param highlight a logical vector indicating which rows to highlight
 #' @param ... further arguments are ignored
 #' @import crayon
-#' @importFrom purrr map map_int map_chr
+#' @importFrom purrr map map_int map_chr map2_chr
 #' @importFrom utils head
 #' @seealso [df_style()] on how to modify colorful data frames
 #' @export
@@ -250,12 +250,14 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
 #'
 #' Make a dataframe colorful
 #' @param x a data frame or similar object (e.g. tibble)
-#' @param ... further arguments are ignored
+#' @param theme Which theme to use
+#' @seealso [colorDF_themes()] to list all themes; [colorDF_themes_show()]
+#'          to view all themes.
 #' @return a colorful data frame – identical object but with the `.style`
 #'         attribute set.
 #' @seealso [df_style()] on how to modify style of the colorful data frame
 #' @export
-as.colorDF <- function(x, ...) {
+colorDF <- function(x, theme="default") {
 
   x <- try(as.data.frame(x), silent=TRUE)
 
@@ -264,9 +266,24 @@ as.colorDF <- function(x, ...) {
   }
 
   class(x) <- c("colorDF", class(x))
-  x <- .set_style(x, .get_style(x))
+  x <- .set_style(x, .get_style(x, theme=theme))
 
   x
+}
+
+
+
+#' Make a dataframe colorful
+#'
+#' Make a dataframe colorful
+#' @param x a data frame or similar object (e.g. tibble)
+#' @param ... further arguments are passed to [colorDF()].
+#' @return a colorful data frame – identical object but with the `.style`
+#'         attribute set.
+#' @seealso [df_style()] on how to modify style of the colorful data frame
+#' @export
+as.colorDF <- function(x, ...) {
+  colorDF(x, ...)
 }
 
 
