@@ -1,5 +1,5 @@
 Package: colorDF
-Title: Colorful Data Frames
+Title: Colorful Data Frames in R Terminal
 Version: 0.1.0
 Authors@R: 
     person(given = "January",
@@ -13,6 +13,7 @@ Description: Colorful Data Frames in the terminal. The new class does
              colors the terminal output of data frames. Some column types
              (such as p-values and identifiers) are automatically
              recognized.
+Depends: R (>= 2.10)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -20,6 +21,9 @@ Imports: purrr,crayon
 Suggests: 
     knitr,
     rmarkdown,
+    fansi,
+    tidyverse,
+    data.table,
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
 RoxygenNote: 7.1.0

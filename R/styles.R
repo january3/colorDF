@@ -10,7 +10,7 @@
 #' @param df_style style for the whole data frame
 #' @param prefix prefix (column separator) to add to each element of x
 #' @export 
-format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE, col_width=NULL, prefix="\u2502") {
+format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE, col_width=NULL, prefix=" ") {
 
   if(is.null(style)) style <- list()
   if(!is.numeric(x)) { style$is.numeric <- NULL ; style$is.pval <- NULL } 
@@ -114,6 +114,7 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
 ## return 
 .get_style <- function(x=NULL, style=NULL, theme=NULL) {
 
+  .themes <- .theme_env[[".themes"]]
   ## if x and x has a style, return it
   if(!is.null(x)) {
     .st <- attr(x, ".style")

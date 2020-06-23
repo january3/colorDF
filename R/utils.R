@@ -48,7 +48,7 @@
 #' * type.styles: a list mapping column types to formatting styles. See "Column types"
 #'   below.
 #' * fixed.width: if not NULL, all columns have the same width
-#' * sep: string separating the columns (default: │)
+#' * sep: string separating the columns 
 #' * digits: how many digits to use
 #' * tibble.style: if not NULL, cut off columns that do not fit the width
 #'
@@ -115,29 +115,60 @@ df_style <- function(x, element) {
 
 
 
-
-`col_type<-` <- function(x, value) {
+#' @rdname col_type
+#' @export
+`col_type<-` <- function(x, cols=NULL, value) {
   style <- attr(x, ".style")
   if(is.null(style)) {
     warning("Object does not have a defined style")
     return(x)
   }
 
-  if(!is.null(value) && (!is.character(value) || is.null(names(value)))) {
-    stop("Column types must be a named character vector")
+  if(!is.null(cols) && length(cols) != length(value)) {
+    stop(sprintf("Cannot asign %d column types to %d columns",
+      length(value), length(cols)))
   }
 
-  if(!is.null(value) && !is.null(style$col.types)) {
-    value <- c(value, style$col.types)
-    value <- value[ !duplicated(names(value)) ]
+  if(is.null(style[["col.types"]])) {
+    style[["col.types"]] <- list()
   }
 
-  style$col.types <- value
+  if(is.null(cols)) {
+    style[["col.types"]] <- value
+  } else {
+    style[["col.types"]][cols] <- value
+  }
+
+
+# if(!is.null(value) && (!is.character(value) || is.null(names(value)))) {
+#   stop("Column types must be a named character vector")
+# }
+#
+# if(!is.null(value) && !is.null(style$col.types)) {
+#   value <- c(value, style$col.types)
+#   value <- value[ !duplicated(names(value)) ]
+# }
+#
+# style$col.types <- value
 
   attr(x, ".style") <- style
   return(x)
 }
 
+
+#' Set or retrieve a column type
+#'
+#' Set or retrieve a column type of a colorful data frame
+#'
+#' @param x a colorful data frame
+#' @param cols column names to set or retrieve
+#' @param value character vector with column types
+#' @examples
+#' mc <- colorDF(mtcars)
+#' col_type(mc, "gear") <- "factor"
+#' col_type(mc, "gear")
+#' col_type(mc) <- list(gear="factor", cyl="integer")
+#' @export
 col_type <- function(x, cols=NULL) {
 
   style <- attr(x, ".style")
@@ -147,7 +178,7 @@ col_type <- function(x, cols=NULL) {
   }
 
   if(!is.null(cols)) {
-    return(style$col.types[cols])
+    return(style$col.types[[cols]])
   } else {
     return(style$col.types)
   }

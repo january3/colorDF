@@ -106,9 +106,12 @@ if(!is.null(c.names.formatted)) {
   ## we use that instead
   if(!is.null(c.names) && !is.null(style[["col.types"]])) {
     columns.known <- names(style[["col.types"]])
-    sel <- columns.known %in% c.names & style[["col.types"]] %in% names(style[["data.styles"]])
+    columns.known.types <- map_chr(style[["col.types"]], ~ .x[[1]])
+
+
+    sel <- columns.known %in% c.names & columns.known.types %in% names(style[["data.styles"]])
     for(i in which(sel)) {
-      ctypes[ c.names == columns.known[i] ] <- style[["col.types"]][i]
+      ctypes[ c.names == columns.known[i] ] <- style[["col.types"]][[i]]
     }
   }
  
@@ -220,7 +223,11 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
 
     rows <- paste0(r.names, rows)
 
-    if(!is.null(highlight)) rows[ highlight ] <- inverse(rows[ highlight ])
+    if(!is.null(highlight)) {
+      nas <- is.na(highlight)
+      highlight[nas] <- FALSE
+      rows[ highlight ] <- inverse(rows[ highlight ])
+    }
 
     if(!is.null(style[["interleave"]])) {
       sel <- seq(2, n, by=2)
@@ -257,7 +264,7 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
 #'         attribute set.
 #' @seealso [df_style()] on how to modify style of the colorful data frame
 #' @export
-colorDF <- function(x, theme="default") {
+colorDF <- function(x, theme=NULL) {
 
   x <- try(as.data.frame(x), silent=TRUE)
 

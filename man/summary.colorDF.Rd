@@ -2,9 +2,12 @@
 % Please edit documentation in R/summary.R
 \name{summary.colorDF}
 \alias{summary.colorDF}
+\alias{summaryColorDF}
 \title{Meaningful summary of data frames}
 \usage{
 \method{summary}{colorDF}(object, ...)
+
+summaryColorDF(object, ...)
 }
 \arguments{
 \item{object}{a data frame (possibly a color data frame)}
@@ -21,4 +24,10 @@ Meaningful summary of data frames
 \details{
 While this function is a summary method for objects of the colorDF
 class, it can also be applied to any other dataframe-like object.
+
+`summaryColorDF` is the exported version of this function to facilitate
+usage in cases when converting an object to a colorDF is not desirable
+}
+\examples{
+summaryColorDF(iris)
 }

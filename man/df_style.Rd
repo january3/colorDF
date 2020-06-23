@@ -42,7 +42,7 @@ data frame object. This attribute is a list with a number of keywords:
 * type.styles: a list mapping column types to formatting styles. See "Column types"
   below.
 * fixed.width: if not NULL, all columns have the same width
-* sep: string separating the columns (default: │)
+* sep: string separating the columns 
 * digits: how many digits to use
 * tibble.style: if not NULL, cut off columns that do not fit the width
 }

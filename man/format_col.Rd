@@ -11,7 +11,7 @@ format_col(
   df_style = NULL,
   format = TRUE,
   col_width = NULL,
-  prefix = "│"
+  prefix = " "
 )
 }
 \arguments{

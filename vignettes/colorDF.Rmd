@@ -1,6 +1,11 @@
 ---
 title: "Color data frame output in R terminal"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    theme: united
 vignette: >
   %\VignetteIndexEntry{Color data frame output in R terminal}
   %\VignetteEngine{knitr::rmarkdown}
@@ -10,10 +15,206 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = ""
 )
 ```
 
-```{r setup}
+```{r setup,echo=FALSE,results="hide",include=FALSE}
 library(colorDF)
+library(tidyverse)
+library(data.table)
 ```
+
+```{r echo=FALSE,include=FALSE}
+options(crayon.enabled = TRUE)
+knitr::knit_hooks$set(output = function(x, options){
+  paste0(
+    '<pre class="r-output"><code>',
+    fansi::sgr_to_html(x = x, warn = FALSE),
+    '</code></pre>'
+  )
+})
+```
+
+# Quick start
+
+(Please note that the HTML colors below are only approximate rendering of how
+the output will look on a terminal).
+
+
+```{r}
+data(starwars)
+sw <- starwars[, c(1:4, 7:8)]
+sw %>% colorDF
+as.colorDF(sw) %>% summary
+```
+
+# Colorful data frames
+
+Your average terminal in which you run R is capable of displaying colors,
+styles and unicode characters. Wouldn't it be nice to add some color to the
+data frames you are displaying? For example, that factors are shown in a
+distinct color (no confusing of strings and factors any more!) or that
+significant p-values are colored in red?
+
+This was my motivation when writing this tiny package. Of course, changing
+default method for printing data frames is nothing a package is allowed to
+do (but read on!). However, this package defines everything you need to get
+dynamic, colorful output when viewing data frames. There are two things
+about colorDF which are important:
+
+ 1. colorDF *never* modifies the behavior of the data frame like object or
+    its contents. The only two things that change are (i) the default print method
+    (visualization), and (ii) the ".style" attribute of the object, and
+    that only if you really change the class of the object, which is
+    usually unnecessary.
+ 2. Any data frame like object can be used in colorDF, and you don't need
+    to modify these objects to use the colorful visualizations.
+
+Yes, you can color *any* object that can be cast into a data frame
+with this or related functions! For example, you can apply it to both
+tibbles and data.table objects:
+
+```{r,results="hide"}
+## works with standard data.frames
+colorDF(mtcars)
+
+## works with tidyverse tibbles
+mtcars %>% as_tibble %>% colorDF
+
+## works with data.table
+colorDF(data.table(mtcars))
+```
+
+The output of these three commands is identical:
+
+```{r echo=FALSE}
+colorDF(mtcars)
+```
+
+# Column types
+
+Column types are mostly like classes, but colorDF introduces some
+additional distinctions, specifically "identifier" (such that character
+columns which contain identifiers can be shown with a particular, distinct
+style) and "pval", to show significant p-values in a different color (and
+use `format.pval()` for formatting).
+
+colorDF tries to guess how each column should be displayed. First of all,
+it determines the class of the column (character, integer, numeric,
+logical, factor). Next, it looks up whether it can guess the contents of
+the column by looking at the column name (ID, p-value). Finally, it checks
+whether any columns have been implicitely been assigned a column type.
+
+To assign a particular column type, you need first to turn a data frame
+colorful and then modify the column type:
+
+```{r}
+sw <- sw %>% as.colorDF
+col_type(sw, "name") <- "identifier"
+col_type(sw, "gender") <- "factor"
+sw$probability <- runif(nrow(sw), 0, 0.1)
+col_type(sw, "probability") <- "pval"
+sw
+```
+
+Note that changing the column type **does not** change the class in the
+data frame! colorDF never touches the data frame object itself, the only
+operations concern the ".style" attribute. So while you may set a column
+type to "character" instead of "factor", it will be looking like a
+character type on the terminal output, but the column class will still be a
+factor.
+
+# Styles and Themes
+
+I am a bit confused when it comes to distinguishing the two. Themes are
+basically internally predefined styles. Styles are simply lists that hold
+information how different columns, column and row headers, separators
+between the columns and highlighted rows are displayed. 
+
+Themes can be set using the `options(colorDF_theme="<theme name>")` command
+or by directly specifying the option in a call to `colorDF`:
+
+```{r}
+colorDF(sw, theme="bw")
+```
+
+Here is an overview of the themes. Some of them are intended for dark
+background and will not look great below:
+
+```{r}
+colorDF_themes_show()
+```
+
+You can add your own themes using `add_colorDF_theme()` (see the example
+section on the help page).
+
+
+# Column styles
+
+Styles of a colorDF object can be directly manipulated using `df_style`:
+
+```{r}
+mtcars.c <- colorDF(mtcars)
+df_style(mtcars.c, "sep") <- "; "
+```
+
+If interested, read the help file for `df_style()`.
+
+# Utilities
+
+colorDF comes with two utility functions. Firstly, it defines a summary
+method for colorful data frames which can also be used for any other data
+frame like object and which I find much more useful than the regular
+summary:
+
+```{r}
+starwars %>% as.colorDF %>% summary
+```
+
+There is a directly visible (exported) version of the colorful summary
+called `summaryColorDF`:
+
+```{r eval=FALSE}
+starwars %>% summaryColorDF
+```
+
+The `highlight()` function allows to mark selected rows from the table:
+
+```{r, eval=FALSE}
+foo <- starwars %>% select(name, species, homeworld) %>% 
+  highlight(.$homeworld == "Tatooine")
+```
+
+(Unfortunately, the HTML representation of the ANSI terminal doesn't show
+that one correctly).
+
+
+# Rmarkdown
+
+The package is intended to be used in terminal. However, as you see above,
+it is possible to get the colored tables also in an rmarkdown document. For
+this, include the following chunk at the beginning of your document:
+
+
+````markdown
+`r ''````{r echo=FALSE,include=FALSE}
+options(crayon.enabled = TRUE)
+knitr::knit_hooks$set(output = function(x, options){
+  paste0(
+    '<pre class="r-output"><code>',
+    fansi::sgr_to_html(x = x, warn = FALSE),
+    '</code></pre>'
+  )
+})
+```
+````
+
+# Issues
+
+The main problem is that it relies on the `crayon` package, which
+unfortunately is sometimes wrong about whether the terminal has 255 colors
+or 16 (at least in the version on CRAN). Case in point, the colors do not
+render correctly in rstudio, despite the fact that the rstudio terminal is
+of course capable of showing all ANSI colors.
+
