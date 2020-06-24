@@ -13,7 +13,7 @@ NULL
 
 .onAttach <- function(libname, pkgname) {
   options(colorDF_theme="light")
-  #num_colors(TRUE)
+  num_colors(TRUE)
   packageStartupMessage(sprintf(  
     "%s: for best results, use terminals which support 255 colors.",
     pkgname
