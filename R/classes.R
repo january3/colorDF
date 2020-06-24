@@ -2,22 +2,19 @@
 
   cols.w <- map_int(1:length(x), ~  max(nchar(strip_style(x[[.x]]))))
 
-#  cols.w <- cols.w + 1
+  #cols.w <- cols.w + 1
   slots <- rep(0, length(cols.w))
   screen <- cumsum(cols.w) 
-  nsl <- floor(sum(cols.w)/width)
-  screen <- screen - nsl * width
+  nsl <- 1
 
-  while(any(screen < 0)) {
-    sel <- screen <= width & screen > 0
+  while(any(screen > 0)) {
+    sel <- screen > 0 & screen < width
     slots[sel] <- nsl
-    screen <- screen + width
-    nsl <- nsl - 1
+    screen <- screen - max(screen[sel])
+    nsl <- nsl + 1
   }
 
-  #print(rbind(cols.w, screen, slots))
-
-  return(slots + 1)
+  return(slots)
 }
 
 .make_header <- function(c.names.formatted, row.names.w, style) {
