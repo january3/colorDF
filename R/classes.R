@@ -17,8 +17,10 @@
   return(slots)
 }
 
-.make_header <- function(c.names.formatted, row.names.w, style) {
-if(!is.null(c.names.formatted)) {
+.make_header <- function(c.names, row.names.w, cols.w, style) {
+  c.names.formatted <- format_col(c.names, col_width=cols.w, df_style=style)
+
+  if(!is.null(c.names.formatted)) {
     header <- paste(c.names.formatted, collapse="")
     header <- format_col(header, style=style[["col.names"]], format=FALSE, prefix="")
     header <- format_col(header, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
@@ -28,6 +30,24 @@ if(!is.null(c.names.formatted)) {
   } else {
     return("")
   }
+}
+
+## classes to class identifiers
+cl2ids <- function(classes) {
+  cl.ids <- c(character="chr", integer="int", numeric="dbl", factor="fct", list="lst")
+  ids <- sprintf("<%s>", cl.ids[classes])
+  ids[ is.na(ids) ] <- "<oth>"
+  return(ids)
+}
+
+.make_header_tibble <- function(classes, row.names.w, cols.w, style) {
+  ids <- cl2ids(classes)
+  ids <- format_col(ids, col_width=cols.w, style=list(decoration="italic"), df_style=style)
+  header <- paste(ids, collapse="")
+  header <- format_col(header, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
+  rnh    <- format_col("", col_width=row.names.w, prefix="")
+  header <- paste0(rnh, header, "\n")
+  return(header)
 }
 
 ## figure out whether row names are present and if yes, if they are needed
@@ -44,9 +64,7 @@ if(!is.null(c.names.formatted)) {
 
 ## formatting columns: alignment style etc
 ## returns the data frame with attribute .width set to column widths
-.format_cols <- function(x, c.names, ctypes, col_styles, df_style) {
-
-
+.format_cols <- function(x, c.names, col_styles, df_style) {
   nx  <- length(x)
 
   cols.w <- NULL
@@ -91,9 +109,9 @@ if(!is.null(c.names.formatted)) {
 ## find styles for columns depending on user predefined values in
 ## style$col.types, automatic recognition of column names and 
 ## column class.
-.get_column_styles <- function(x, style, c.names, ctypes) {
+.get_column_styles <- function(x, style, c.names, classes) {
 
-  ctypes <- unlist(ctypes)
+  ctypes <- classes
 
   ## automatically guess column type from column name
   ## (e.g. "pval" will probably be a p value)
@@ -143,6 +161,7 @@ if(!is.null(c.names.formatted)) {
 #' @param width number of characters that the data frame should span on output
 #' @param row.names if TRUE (default), row names will be shown on output
 #' @param highlight a logical vector indicating which rows to highlight
+#' @param tibble.style whether to print with tibble style
 #' @param ... further arguments are ignored
 #' @import crayon
 #' @importFrom purrr map map_int map_chr map2_chr
@@ -151,12 +170,19 @@ if(!is.null(c.names.formatted)) {
 #' @export
 print.colorDF <- function(x, n=20, width=getOption("width"), 
   row.names=TRUE, 
+  tibble.style=getOption("colorDF_tibble_style"),
   highlight=NULL,
   ...) {
 
   nc <- ncol(x) ; nr <- nrow(x)
   if(n > nr) n <- nr
   style <- .get_style(x)
+
+  if(!is.null(tibble.style) || !is.null(style[["tibble.style"]])) { 
+    tibble.style <- TRUE
+  } else {
+    tibble.style <- FALSE
+  }
 
   .catf("Color data frame %d x %d:\n", nc, nr)
   if(n < nr) { .catf(silver $ italic("(Showing rows 1 - %d out of %d)\n"), n, nr) }
@@ -173,13 +199,13 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
   nx <- length(x)
 
   ## column types
-  ctypes <- map(x, ~ class(.)[1])
+  classes <- map_chr(x, ~ class(.)[1])
 
   ## format columns
-  col_styles <- .get_column_styles(x, style, c.names, ctypes)
+  col_styles <- .get_column_styles(x, style, c.names, classes)
   cols.w <- NULL
 
-  x <- .format_cols(x, c.names, ctypes, col_styles, df_style=style)
+  x <- .format_cols(x, c.names, col_styles, df_style=style)
 
   cols.w <- attr(x, ".width") ## cols width without separator (prefix)
   cols.w.real <- map_int(x, ~  max(nchar(strip_style(.x))))
@@ -190,15 +216,8 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
     warning(sprintf("Width to narrow, increasing to %d", max(cols.w) + row.names.w))
   }
 
-  #.catf(red $ italic ("width=%d (full=%d)\n"), width, width + row.names.w)
-
   ## split the data frame into chunks fitting the width
   slots <- .getslots(x, width)
-
-  ## align column names (no need to worry about NULL)
-  #c.names.formatted <- col_align(c.names, cols.w, align=style$col.names$align)
-  c.names.formatted <- format_col(c.names, col_width=cols.w, df_style=style)
-
 
   if(!is.null(style[["row.names"]])) {
     r.names <- format_col(r.names, style=style[["row.names"]], prefix="", format=FALSE)
@@ -208,10 +227,14 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
 
   nslots <- max(slots)
 
-  if(!is.null(style[["tibble.style"]])) { nslots <- 1 }
+  if(tibble.style) { nslots <- 1 }
 
   for(sl in 1:nslots) {
-    cat(.make_header(c.names.formatted[ slots == sl ], row.names.w, style))
+    sel <- slots == sl
+    cat(.make_header(c.names[ sel ], row.names.w, cols.w[ sel ], style))
+    if(tibble.style) {
+      cat(.make_header_tibble(classes[ sel ], row.names.w, cols.w[sel], style))
+    }
 
     rows <- map_chr(1:n, ~ {
       i <- .x
@@ -238,11 +261,16 @@ print.colorDF <- function(x, n=20, width=getOption("width"),
     cat("\n\n")
   }
 
-  if(!is.null(style[["tibble.style"]]) && any(slots != 1)) { 
-    .catf(silver $ italic ("%d more columns"), sum(slots != 1))
+  if(tibble.style && any(slots != 1)) { 
+    .catf(silver $ italic ("%d more columns: "), sum(slots != 1))
     if(!is.null(c.names)) {
-      .catf(silver $ italic(": %s"), 
-        paste(c.names[ slots != 1 ], collapse=", "))
+      .catf(silver $ italic(
+        paste(sprintf("%s (%s)", c.names[ slots != 1 ],
+                                 cl2ids(classes[ slots != 1 ])),
+                                 collapse=", ")
+
+
+      ))
     }
     cat("\n")
   }
