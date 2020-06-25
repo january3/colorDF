@@ -190,6 +190,33 @@ foo <- starwars %>% select(name, species, homeworld) %>%
 that one correctly).
 
 
+# Setting up colorDF as the default data frame print method
+
+You can use colorDF as the default method for displaying data frames and
+similar objects. For this, you need to use the `colorDF:::print.colorDF`
+function:
+
+```{r eval=FALSE}
+## for regular data frames
+print.data.frame <- colorDF:::print.colorDF
+
+## for tidyverse tibbles
+print.tbl        <- colorDF:::print.colorDF
+
+## for data.tables
+print.data.table <- colorDF:::print.colorDF
+```
+
+This will not replace or modify the original functions from data.table or
+tibble packages, but merely mask these.
+
+Should you want to go back to the original print functions, just remove
+these new functions:
+
+```{r eval=FALSE}
+rm(print.data.frame, print.tbl, print.data.table)
+```
+
 # Rmarkdown
 
 The package is intended to be used in terminal. However, as you see above,
@@ -210,11 +237,5 @@ knitr::knit_hooks$set(output = function(x, options){
 ```
 ````
 
-# Issues
 
-The main problem is that it relies on the `crayon` package, which
-unfortunately is sometimes wrong about whether the terminal has 255 colors
-or 16 (at least in the version on CRAN). Case in point, the colors do not
-render correctly in rstudio, despite the fact that the rstudio terminal is
-of course capable of showing all ANSI colors.
 
