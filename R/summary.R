@@ -24,7 +24,7 @@
   sel <- nchar(nt) > 15
   nt[sel] <- paste0(substr(nt[sel], 1, 12), '...')
 
-  last <- which(cumsum(nchar(nt)) > 30)[1] - 1
+  last <- which(cumsum(nchar(nt)) > 20)[1] - 1
   if(is.na(last)) last <- length(t)
 
   ret <- paste(paste0(nt[1:last], ": ", t[1:last]), collapse=", ")
@@ -76,7 +76,7 @@ summary.colorDF <- function(object, ...) {
   #modal <- map2_chr(x, uniq, ~ if(.y == nr) { "N/A" } else {names(table(.))[1]})
   summary <- map2_chr(x, classes, get_summary)
 
-  ret <- data.frame(Col=cnames, Class=classes, NAs=nas, unique=uniq,
+  ret <- data.frame(Col=cnames, Class=cl2ids(classes), NAs=nas, unique=uniq,
     Summary=summary,
     stringsAsFactors=FALSE)
 

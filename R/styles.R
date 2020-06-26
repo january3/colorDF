@@ -116,23 +116,23 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
 ## return 
 .get_style <- function(x=NULL, style=NULL, theme=NULL) {
 
-  .themes <- .theme_env[[".themes"]]
-  ## if x and x has a style, return it
-  if(!is.null(x)) {
-    .st <- attr(x, ".style")
-    if(!is.null(.st)) { return(.st) }
-  }
-
-  ## otherwise, maybe style has been provided
+  ## First, maybe style has been directly provided
   if(!is.null(style)) return(style)
 
   ## or theme
+  .themes <- .theme_env[[".themes"]]
   if(!is.null(theme)) {
     if(!is.null(.themes[[theme]])) {
       return(.themes[[theme]])
     } else {
       warning(sprintf("No such theme: %s", theme))
     }
+  }
+
+  ## otherwise, if x and x has a style, return it
+  if(!is.null(x)) {
+    .st <- attr(x, ".style")
+    if(!is.null(.st)) { return(.st) }
   }
 
   ## finally, return default style

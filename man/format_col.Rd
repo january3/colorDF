@@ -11,7 +11,8 @@ format_col(
   df_style = NULL,
   format = TRUE,
   col_width = NULL,
-  prefix = " "
+  prefix = " ",
+  min.width = 5L
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ format_col(
 \item{col_width}{optional: width to which elements of the vector should be aligned}
 
 \item{prefix}{prefix (column separator) to add to each element of x}
+
+\item{min.width}{minimum width of a column}
 }
 \description{
 Format a vector (data frame column) aligning, rounding the numbers and

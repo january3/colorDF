@@ -19,34 +19,38 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r echo=FALSE,include=FALSE,eval=TRUE}
+options(crayon.enabled = TRUE)
+options(crayon.colors = 256)
+knitr::knit_hooks$set(output = function(x, options){
+  paste0(
+    '<pre class="r-output"><code>',
+    fansi::sgr_to_html(x = htmltools::htmlEscape(x), warn = FALSE),
+    '</code></pre>'
+  )
+})
+
+## this is an ugly, ugly hack, but otherwise crayon does not listen
+num_colors <- function(forget=TRUE) 256
+library(crayon)
+assignInNamespace("num_colors", num_colors, pos="package:crayon")
+```
+
+
 ```{r setup,echo=FALSE,results="hide",include=FALSE}
 library(colorDF)
 library(tidyverse)
 library(data.table)
 ```
 
-```{r echo=FALSE,include=FALSE}
-options(crayon.enabled = TRUE)
-knitr::knit_hooks$set(output = function(x, options){
-  paste0(
-    '<pre class="r-output"><code>',
-    fansi::sgr_to_html(x = x, warn = FALSE),
-    '</code></pre>'
-  )
-})
-```
-
 # Quick start
-
-(Please note that the HTML colors below are only approximate rendering of how
-the output will look on a terminal).
 
 
 ```{r}
 data(starwars)
-sw <- starwars[, c(1:4, 7:8)]
+sw <- starwars[, c(1:3, 7:8)]
 sw %>% colorDF
-as.colorDF(sw) %>% summary
+colorDF(sw) %>% summary
 ```
 
 # Colorful data frames
@@ -65,9 +69,9 @@ about colorDF which are important:
 
  1. colorDF *never* modifies the behavior of the data frame like object or
     its contents. The only two things that change are (i) the default print method
-    (visualization), and (ii) the ".style" attribute of the object, and
-    that only if you really change the class of the object, which is
-    usually unnecessary.
+    (visualization), and (ii) the ".style" and ".coltp" attributes of the
+    object, and that only if you really change the class of the object,
+    which is often unnecessary.
  2. Any data frame like object can be used in colorDF, and you don't need
     to modify these objects to use the colorful visualizations.
 
@@ -181,7 +185,7 @@ starwars %>% summaryColorDF
 
 The `highlight()` function allows to mark selected rows from the table:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 foo <- starwars %>% select(name, species, homeworld) %>% 
   highlight(.$homeworld == "Tatooine")
 ```
@@ -217,6 +221,26 @@ these new functions:
 rm(print.data.frame, print.tbl, print.data.table)
 ```
 
+# Global options
+
+There are two global options which override whatever has been defined in
+a particular theme / style.
+
+ * `colorDF_tibble_style`: if not NULL, tibble conventions will be used
+   (i.e., show only columns which fit on the screen and create a subheader
+   with column classes)
+ * `colorDF_sep`: column separator string 
+ * `colorDF_n`: how many rows to show on the screen
+
+For example, 
+
+```{r problemchild, eval=TRUE,results="markdown"}
+options(colorDF_tibble_style="yes please")
+options(colorDF_sep= " ")
+options(colorDF_n=5)
+colorDF(starwars)
+```
+
 # Rmarkdown
 
 The package is intended to be used in terminal. However, as you see above,
@@ -225,15 +249,37 @@ this, include the following chunk at the beginning of your document:
 
 
 ````markdown
-`r ''````{r echo=FALSE,include=FALSE}
+`r ''````{r echo=FALSE}
 options(crayon.enabled = TRUE)
 knitr::knit_hooks$set(output = function(x, options){
   paste0(
     '<pre class="r-output"><code>',
-    fansi::sgr_to_html(x = x, warn = FALSE),
+    fansi::sgr_to_html(x = htmltools::htmlEscape(x), warn = FALSE),
     '</code></pre>'
   )
 })
+```
+````
+
+# Issues
+
+Currently, colorDF relies on the `crayon` library to generate the ANSI escape
+codes. Unfortunately, crayon is peculiar about trying to guess the terminal
+type. Without going into details, there are situations in which it is not
+possible to force crayon into using 256 colors, even if you know that it
+really works. One such example is this vignette: if an rmarkdown file is
+built from command line, crayon will not believe that it can use 256 colors
+no matter what.
+
+The reason that the colors in this vignette appear correct is that I used
+an ugly hack to substitute the `crayon::num_colors()` function by a
+function that always returns 256:
+
+````markdown
+`r ''````{r echo=FALSE}
+num_colors <- function(forget=TRUE) 256
+library(crayon)
+assignInNamespace("num_colors", num_colors, pos="package:crayon")
 ```
 ````
 

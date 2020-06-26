@@ -6,23 +6,30 @@
 \usage{
 \method{print}{colorDF}(
   x,
-  n = 20,
+  n = getOption("colorDF_n"),
   width = getOption("width"),
   row.names = TRUE,
+  tibble.style = getOption("colorDF_tibble_style"),
   highlight = NULL,
+  sep = getOption("colorDF_sep"),
   ...
 )
 }
 \arguments{
 \item{x}{a colorful data frame (object with class colorDF)}
 
-\item{n}{Number of rows to show (default=20, use Inf to show all)}
+\item{n}{Number of rows to show (default=20, use Inf to show all; this
+value can be set with options("colorDF_n"))}
 
 \item{width}{number of characters that the data frame should span on output}
 
 \item{row.names}{if TRUE (default), row names will be shown on output}
 
+\item{tibble.style}{whether to print with tibble style (overrides style setting)}
+
 \item{highlight}{a logical vector indicating which rows to highlight}
+
+\item{sep}{column separator string (overrides style setting)}
 
 \item{...}{further arguments are ignored}
 }
