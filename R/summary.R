@@ -51,14 +51,14 @@ get_summary <- function(x, class) {
 #' While this function is a summary method for objects of the colorDF
 #' class, it can also be applied to any other dataframe-like object.
 #'
-#' `summaryColorDF` is the exported version of this function to facilitate
-#' usage in cases when converting an object to a colorDF is not desirable
+#' `summary_colorDF` is the exported version of this function to facilitate
+#' usage in cases when converting an object to a colorDF is not desirable.
 #' @return A colorful data frame of class colorDF containing useful
 #'         information on a dataframe-like object.
 #' @param object a data frame (possibly a color data frame)
 #' @param ... ignored
 #' @examples
-#' summaryColorDF(iris)
+#' summary_colorDF(iris)
 #' @importFrom stats quantile
 #' @export
 summary.colorDF <- function(object, ...) {
@@ -89,6 +89,6 @@ summary.colorDF <- function(object, ...) {
 
 #' @rdname summary.colorDF
 #' @export
-summaryColorDF <- function(object, ...) {
+summary_colorDF <- function(object, ...) {
   summary.colorDF(object, ...)
 }
