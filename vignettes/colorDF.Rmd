@@ -180,7 +180,7 @@ starwars %>% as.colorDF %>% summary
 ```
 
 There is a directly visible (exported) version of the colorful summary
-called `summaryColorDF`:
+called `summary_colorDF`:
 
 ```{r eval=FALSE}
 starwars %>% summary_colorDF
@@ -215,7 +215,9 @@ print.data.table <- colorDF:::print.colorDF
 ```
 
 This will not replace or modify the original functions from data.table or
-tibble packages, but merely mask these.
+tibble packages, but merely mask these. And from now on, every data frame
+like object will be shown in color, but otherwise, its behavior will not
+change.
 
 Should you want to go back to the original print functions, just remove
 these new functions:

@@ -10,7 +10,7 @@
     fg_na      = "grey50",
     col.names  = list(bg="deepskyblue4", fg="white", decoration="bold", align="center"),
     row.names  = list(decoration="italic", fg="grey"),
-    interleave = list(bg="grey98", grey=TRUE),
+    interleave = list(bg="grey94", grey=TRUE),
     col.types   = NULL,
     autoformat  = TRUE,
     data.styles = list(
@@ -23,6 +23,14 @@
       pval       = list(fg_sign="red", fg="grey", sign.thr=0.05, is.pval=TRUE),
       default    = list(fg="#000000", align="left"))
   ),
+
+  minimal= list(
+    description = "Almost no style",
+    sep         = " ",
+    id          = "minimal",
+    digits      = 2,
+    interleave  = list(bg="grey94")
+    ),
 
   universal = list(
     description = "Suitable for all terminals",
@@ -45,6 +53,22 @@
       pval       = list(fg_sign="#CC0000", sign.thr=0.05, is.pval=TRUE),
       default    = list(fg="#000000", align="left"))
   ),
+
+
+  tibble=list(
+    description  = "Very much like a tibble",
+    sep          = " ",
+    tibble_style = TRUE,
+    id           = "tibble",
+    digits       = 3,
+    fg_na        = "red",
+    row.names    = list(fg="grey50"),
+    data.styles  = list(
+             integer = list(fg_neg="red", is.numeric=TRUE),
+             numeric = list(fg_neg="red", is.numeric=TRUE)
+    )
+    
+    ),
 
 
   dark=list(
@@ -77,7 +101,7 @@
     fg_na      = "grey20",
     col.names  = list(bg="black", fg="white", decoration="bold", align="center"),
     row.names  = list(decoration="italic", fg="grey"),
-    interleave = list(bg="grey98", grey=TRUE),
+    interleave = list(bg="grey94", grey=TRUE),
     col.types   = NULL,
     autoformat  = TRUE,
     data.styles = list(

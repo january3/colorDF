@@ -1,6 +1,20 @@
+## combines cat and sprintf
+.catf <- function(x, ...) cat(sprintf(x, ...))
+
+## replaces null/na values by a default
+## usage: x %OR% y
 `%OR%` <- function(x, y) {
   if(is.null(x) || length(x) == 0 || (length(x) == 1 && is.na(x))) x <- y
   return(x)
+}
+
+## classes to class identifiers
+cl2ids <- function(classes) {
+  cl.ids <- c(character="chr", integer="int", numeric="dbl", factor="fct", list="lst", logical="lgl")
+  ids <- cl.ids[classes]
+  ids[ is.na(ids) ] <- "oth"
+  ids <- sprintf("<%s>", ids)
+  return(ids)
 }
 
 
@@ -179,7 +193,6 @@ col_type <- function(x, cols=NULL) {
 
 }
 
-.catf <- function(x, ...) cat(sprintf(x, ...))
 
 #' Remove the colorful dataframe style attribute
 #' 

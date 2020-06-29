@@ -58,6 +58,7 @@ get_summary <- function(x, class) {
 #' @param object a data frame (possibly a color data frame)
 #' @param ... ignored
 #' @examples
+#' summary(colorDF(iris))
 #' summary_colorDF(iris)
 #' @importFrom stats quantile
 #' @export
