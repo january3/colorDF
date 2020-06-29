@@ -1,6 +1,6 @@
 Package: colorDF
 Title: Colorful Data Frames in R Terminal
-Version: 0.1.3
+Version: 0.1.3.9000
 Authors@R: 
     person(given = "January",
            family = "Weiner",
