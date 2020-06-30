@@ -140,9 +140,6 @@
       pval       = list(fg_sign="#FFFFFF", fg="grey50", sign.thr=0.05, is.pval=TRUE),
       default    = list(fg="#FFFFFF", align="left"))
     )
-
-
-
 )
 
 
@@ -155,6 +152,9 @@
 colorDF_themes <- function() {
   names(.theme_env[[".themes"]])
 }
+
+
+
 
 
 .example_colorDF <- data.frame(
@@ -211,6 +211,12 @@ colorDF_themes_show <- function(themes=NULL) {
 #' @param theme name
 #' @examples
 #' get_colorDF_theme("bw")
+#'
+#' ## use it to change the style of a colorDF
+#' foo <- colorDF(mtcars)
+#' df_style(foo) <- get_colorDF_theme("wb")
+#' ## Slightly modify the style
+#' df_style(foo)$data.styles$pval$fg_sign <- "red"
 #' @export
 get_colorDF_theme <- function(theme) {
   ret <- .theme_env[[".themes"]][[theme]] 
