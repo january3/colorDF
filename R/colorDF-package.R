@@ -14,16 +14,17 @@ NULL
 ## environment holding some global configuration options
 .colorDF_DataEnv <- new.env(parent=emptyenv())
 
-
-.onAttach <- function(libname, pkgname) {
-  if(is.null(getOption("colorDF_theme"))) {
-    options(colorDF_theme="light")
-  }
-
+.onLoad <- function(libname, package) {
   if(!is.null(noitalic <- getOption("colorDF_noitalic")) && noitalic) {
     .colorDF_DataEnv[["noitalic"]] <- TRUE
   } else {
     .colorDF_DataEnv[["noitalic"]] <- FALSE
+  }
+}
+
+.onAttach <- function(libname, pkgname) {
+  if(is.null(getOption("colorDF_theme"))) {
+    options(colorDF_theme="light")
   }
 
   num_colors(TRUE)
