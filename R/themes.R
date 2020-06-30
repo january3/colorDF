@@ -11,6 +11,7 @@
     col.names  = list(bg="deepskyblue4", fg="white", decoration="bold", align="center"),
     row.names  = list(decoration="italic", fg="grey"),
     interleave = list(bg="grey94", grey=TRUE),
+    highlight  = list(bg="#87FFFF"),
     col.types   = NULL,
     autoformat  = TRUE,
     data.styles = list(
@@ -41,6 +42,7 @@
     col.names  = list(bg="deepskyblue4", fg="white", decoration="bold", align="center"),
     row.names  = list(decoration="italic", fg="grey"),
     interleave = list(bg="grey75", grey=TRUE),
+    highlight  = list(bg="grey50"),
     col.types   = NULL,
     autoformat  = TRUE,
     data.styles = list(
@@ -76,8 +78,9 @@
     sep         = "\u2502",
     id         = "dark",
     digits     = 2,
-    fg_na      = "grey20",
-    col.names  = list(bg="deepskyblue4", fg="white", decoration="bold", align="center"),
+    fg_na      = "grey50",
+    highlight  = list(bg="#005FFF"),
+    col.names  = list(bg="#0000D7", fg="white", decoration="bold", align="center"),
     row.names  = list(decoration="italic", fg="grey"),
     interleave = list(bg="grey20", grey=TRUE),
     col.types   = NULL,
@@ -99,6 +102,7 @@
     id          = "bw",
     digits     = 2,
     fg_na      = "grey20",
+    highlight  = list(bg="grey50"),
     col.names  = list(bg="black", fg="white", decoration="bold", align="center"),
     row.names  = list(decoration="italic", fg="grey"),
     interleave = list(bg="grey94", grey=TRUE),
@@ -114,6 +118,7 @@
       pval       = list(fg_sign="#000000", fg="grey", sign.thr=0.05, is.pval=TRUE),
       default    = list(align="left"))
     ),
+
   wb=list(
     description = "Black and white only. Suitable for white on black terminals",
     sep         = "\u2502",
@@ -153,13 +158,13 @@ colorDF_themes <- function() {
 
 
 .example_colorDF <- data.frame(
-  ID=c("ID1", "ID2"),
-  String=c("foo", "baz"),
-  Factor=c("foo", "baz"),
-  Number=c(12.1, -pi),
-  Integer=c(12L, -13L),
-  Logical=c(TRUE, FALSE),
-  Pvalue=c(0.001, 0.314159))
+  ID=c("ID1", "ID2", "ID3"),
+  String=c("foo", "baz", "highlight"),
+  Factor=c("foo", "baz", "boo"),
+  Number=c(12.1, -pi, exp(1)),
+  Integer=c(12L, -13L, 42),
+  Logical=c(TRUE, FALSE, NA),
+  Pvalue=c(0.001, 0.314159, NA))
 
 
 #' Demonstrate all defined themes
@@ -188,7 +193,7 @@ colorDF_themes_show <- function(themes=NULL) {
 
   for(n in setdiff(names(themes), "default")) {
     .catf("Theme %s - %s:\n", n, themes[[n]]$description %OR% "no description")
-    print(colorDF(.example_colorDF, theme=n))
+    print(colorDF(.example_colorDF, theme=n), highlight=c(FALSE, FALSE, TRUE))
     cat("\n")
   }
 

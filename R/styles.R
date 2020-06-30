@@ -1,3 +1,27 @@
+.apply_style <- function(x, style) {
+  x.ret <- x
+
+  if(!is.null(style[["fg"]])) {
+    fg.style <- make_style(style$fg)
+    x.ret <- fg.style(x.ret)
+  }
+
+  if(!is.null(style$bg)) {
+    bg.style <- make_style(style$bg, bg=TRUE)
+    x.ret <- bg.style(x.ret)
+  }
+
+  if(!is.null(style$decoration)) {
+    if("bold" %in% style$decoration)      { x.ret <- bold(x.ret) }
+    if("italic" %in% style$decoration)    { x.ret <- italic(x.ret) }
+    if("inverse" %in% style$decoration)   { x.ret <- inverse(x.ret) }
+    if("underline" %in% style$decoration) { x.ret <- underline(x.ret) }
+  }
+  return(x.ret)
+}
+
+
+
 #' Format a vector using styles
 #' 
 #' Format a vector (data frame column) aligning, rounding the numbers and
@@ -54,7 +78,6 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
 
 
   if(is.logical(x)) {
-
     if(!is.null(style$fg_true)) {
       sel <- !is.na(x) & x 
       x.ret[sel] <- make_style(style$fg_true)(x.ret[sel])
@@ -66,22 +89,8 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
     }
   }
 
+  x.ret <- .apply_style(x.ret, style)
 
-  if(!is.null(style[["fg"]])) {
-    fg.style <- make_style(style$fg)
-    x.ret <- fg.style(x.ret)
-  }
-
-  if(!is.null(style$bg)) {
-    bg.style <- make_style(style$bg, bg=TRUE)
-    x.ret <- bg.style(x.ret)
-  }
-
-  if(!is.null(style$decoration)) {
-    if("bold" %in% style$decoration) { x.ret <- bold(x.ret) }
-    if("italic" %in% style$decoration) { x.ret <- italic(x.ret) }
-    if("inverse" %in% style$decoration) { x.ret <- inverse(x.ret) }
-  }
 
   x.ret <- paste0(prefix, x.ret)
 

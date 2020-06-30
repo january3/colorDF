@@ -283,7 +283,11 @@ print_colorDF <- function(x, n=getOption("colorDF_n"), width=getOption("width"),
     if(!is.null(highlight)) {
       nas <- is.na(highlight)
       highlight[nas] <- FALSE
-      rows[ highlight ] <- inverse(rows[ highlight ])
+      if(!is.null(style$highlight)) {
+        rows[highlight] <- .apply_style(rows[highlight], style$highlight)
+      } else {
+        rows[ highlight ] <- underline(rows[ highlight ])
+      }
     }
 
     if(!is.null(style[["interleave"]])) {
@@ -295,7 +299,7 @@ print_colorDF <- function(x, n=getOption("colorDF_n"), width=getOption("width"),
     rows <- format_col(rows, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
 
     ret <- ret %+% paste(rows, collapse="\n")
-    ret <- ret %+% "\n\n"
+    ret <- ret %+% "\n"
   }
 
   if(tibble_style && any(slots != 1)) { 
