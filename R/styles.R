@@ -13,7 +13,7 @@
 
   if(!is.null(style$decoration)) {
     if("bold" %in% style$decoration)      { x.ret <- bold(x.ret) }
-    if("italic" %in% style$decoration)    { x.ret <- italic(x.ret) }
+    if("italic" %in% style$decoration && !.colorDF_DataEnv[["noitalic"]])    { x.ret <- italic(x.ret) }
     if("inverse" %in% style$decoration)   { x.ret <- inverse(x.ret) }
     if("underline" %in% style$decoration) { x.ret <- underline(x.ret) }
   }

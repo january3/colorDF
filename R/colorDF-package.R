@@ -11,11 +11,24 @@
 #' @name colorDF-package
 NULL
 
+## environment holding some global configuration options
+.colorDF_DataEnv <- new.env(parent=emptyenv())
+
+
 .onAttach <- function(libname, pkgname) {
-  options(colorDF_theme="light")
+  if(is.null(getOption("colorDF_theme"))) {
+    options(colorDF_theme="light")
+  }
+
+  if(!is.null(noitalic <- getOption("colorDF_noitalic")) && noitalic) {
+    .colorDF_DataEnv[["noitalic"]] <- TRUE
+  } else {
+    .colorDF_DataEnv[["noitalic"]] <- FALSE
+  }
+
   num_colors(TRUE)
   packageStartupMessage(sprintf(  
-    "%s: for best results, use terminals which support 255 colors.",
+    "%s: for best results, use terminals which support 256 colors.",
     pkgname
     ))
 }
