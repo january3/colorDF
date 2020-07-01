@@ -11,9 +11,9 @@
 #' @export
 colorDF <- function(x, theme=NULL) {
 
-  x <- try(as.data.frame(x), silent=TRUE)
+  err <- try(as.data.frame(x), silent=TRUE)
 
-  if(inherits(x, "try-error")) {
+  if(inherits(err, "try-error")) {
     stop("colorDF: x does not seem to be a data frame-like object")
   }
 

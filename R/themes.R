@@ -21,6 +21,7 @@
       logical    = list(fg_true="blue", fg_false="red", align="left"),
       factor     = list(fg="blue", is.numeric=FALSE, align="left"),
       identifier = list(decoration="bold", align="right"),
+      match      = list(fg="grey", fg_match="red"),
       pval       = list(fg_sign="red", fg="grey", sign.thr=0.05, is.pval=TRUE),
       default    = list(fg="#000000", align="left"))
   ),
@@ -52,6 +53,7 @@
       logical    = list(fg_true="blue", fg_false="red", align="left"),
       factor     = list(fg="blue", is.numeric=FALSE, align="left"),
       identifier = list(decoration="bold", align="right"),
+      match      = list(fg_match="#CC0000"),
       pval       = list(fg_sign="#CC0000", sign.thr=0.05, is.pval=TRUE),
       default    = list(fg="#000000", align="left"))
   ),
@@ -92,6 +94,7 @@
       logical    = list(fg_true="blue", fg_false="#FF0000", align="left"),
       factor     = list(fg="blue", is.numeric=FALSE, align="left"),
       identifier = list(decoration="bold", align="right"),
+      match      = list(fg="grey", fg_match="#FF0000"),
       pval       = list(fg_sign="#FF0000", fg="grey", sign.thr=0.05, is.pval=TRUE),
       default    = list(align="left"))
     ),
@@ -115,6 +118,7 @@
       logical    = list(fg_true="#000000", fg_false="#333333", align="left"),
       factor     = list(is.numeric=FALSE, align="left"),
       identifier = list(decoration="bold", align="right"),
+      match      = list(fg_match="#000000", fg="grey"),
       pval       = list(fg_sign="#000000", fg="grey", sign.thr=0.05, is.pval=TRUE),
       default    = list(align="left"))
     ),

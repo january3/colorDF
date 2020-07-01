@@ -91,6 +91,10 @@ df <- as.colorDF(mtcars)
 ## row names should be red on yellow background (yikes!)
 df_style(df, "row.names") <- list(fg="red", bg="#FFFF00")
 
+## you can use `$` to access the elements
+## here, show significant p-values in green
+df_style(df)$data.styles$pval$fg_sign <- "green"
+
 ## example of assigning multiple values in one assignment:
 df_style(df) <- list(interleave=list(fg="#FFFFFF", bg="blue"),
                   row.names=list(fg="blue", bg="#FFFF00"), 

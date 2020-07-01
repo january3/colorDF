@@ -15,3 +15,10 @@ colorless data frame
 \description{
 Remove the colorful dataframe style attribute
 }
+\details{
+Strips the color data frame style, but leaves the .coltp and class
+intact.
+}
+\seealso{
+To completely remove the colorDF class and attributes, use [colorDF_remove()]
+}

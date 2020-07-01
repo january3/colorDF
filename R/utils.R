@@ -141,10 +141,12 @@ df_style <- function(x, element) {
     col_type <- list()
   }
 
-  if(!is.null(cols) && length(cols) != length(value)) {
+  if(!is.null(cols) && !is.null(value) && length(value) != 1 && length(cols) != length(value)) {
     stop(sprintf("Cannot asign %d column types to %d columns",
       length(value), length(cols)))
   }
+
+  if(is.numeric(cols)) cols <- paste0("X.", cols)
 
   if(is.null(cols)) {
     col_type <- value
@@ -185,14 +187,16 @@ df_style <- function(x, element) {
 col_type <- function(x, cols=NULL) {
 
   col_type <- attr(x, ".coltp")
-  if(is.null(style)) {
+
+  if(is.null(col_type)) {
     return(NULL)
   }
 
   if(!is.null(cols)) {
+    if(is.numeric(cols)) cols <- paste0("X.", cols)
     return(col_type$col.types[[cols]])
   } else {
-    return(col_type$col.types)
+    return(col_type)
   }
 
 }
@@ -201,8 +205,12 @@ col_type <- function(x, cols=NULL) {
 #' Remove the colorful dataframe style attribute
 #' 
 #' Remove the colorful dataframe style attribute
+#' 
+#' Strips the color data frame style, but leaves the .coltp and class
+#' intact. 
 #' @return colorless data frame
 #' @param x a colorful dataframe 
+#' @seealso To completely remove the colorDF class and attributes, use [colorDF_remove()]
 #' @export
 remove_df_style <- function(x) {
   attr(x, ".style") <- NULL

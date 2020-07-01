@@ -14,7 +14,7 @@ NULL
 ## environment holding some global configuration options
 .colorDF_DataEnv <- new.env(parent=emptyenv())
 
-.onLoad <- function(libname, package) {
+.onLoad <- function(libname, pkgname) {
   if(!is.null(noitalic <- getOption("colorDF_noitalic")) && noitalic) {
     .colorDF_DataEnv[["noitalic"]] <- TRUE
   } else {

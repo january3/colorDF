@@ -66,6 +66,13 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
   }
 
   ## fancy
+  if(!is.null(style$pattern) && !is.null(style$fg_match)) {
+    tmp <- as.character(x)
+    sel <- grepl(style$pattern, tmp)
+    fg.style <- make_style(style$fg_match)
+    x.ret[sel] <- fg.style(x.ret[sel])
+  }
+
   if(is.numeric(x) && !is.null(style$is.pval)) {
     x.ret <- .format_col_pval(x, x.ret, col_name=col_name, style)
   }
@@ -89,8 +96,8 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
     }
   }
 
+  ## standard key words: fg, bg, decoration
   x.ret <- .apply_style(x.ret, style)
-
 
   x.ret <- paste0(prefix, x.ret)
 

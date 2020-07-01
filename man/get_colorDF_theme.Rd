@@ -17,4 +17,10 @@ Return a style defined in a theme
 }
 \examples{
 get_colorDF_theme("bw")
+
+## use it to change the style of a colorDF
+foo <- colorDF(mtcars)
+df_style(foo) <- get_colorDF_theme("wb")
+## Slightly modify the style
+df_style(foo)$data.styles$pval$fg_sign <- "red"
 }

@@ -125,7 +125,6 @@
     columns.known <- names(col_types_predef)
     columns.known.types <- map_chr(col_types_predef, ~ .x[[1]])
 
-
     sel <- columns.known %in% c.names & columns.known.types %in% names(style[["data.styles"]])
     for(i in which(sel)) {
       ctypes[ c.names == columns.known[i] ] <- col_types_predef[[i]]
@@ -152,9 +151,6 @@
 
   return(col_styles)
 }
-
-
-
 
 #' @rdname print_colorDF
 #' @export
