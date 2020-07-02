@@ -21,21 +21,29 @@
     chrs <- rep(" ", width)
     chrs[.x[1]:.x[5]] <- "\u2500"
     #chrs[.x[1]:.x[5]] <- "-"
-    chrs[.x[1]] <- "\u251C"
-    chrs[.x[5]] <- "\u2524"
+    #chrs[.x[1]] <- "\u251C"
+    #chrs[.x[5]] <- "\u2524"
+    chrs[.x[1]] <- "\u257E"
+    chrs[.x[5]] <- "\u257C"
+
     #chrs[.x[c(1,5)]] <- "|"
     #chrs[.x[2]:.x[4]] <- "\u2587"
     #chrs[.x[2]:.x[4]] <- "\u25A0"
-    chrs[.x[2]:.x[4]] <- "="
+    #chrs[.x[2]:.x[4]] <- "\u2B1B"
+    #chrs[.x[2]:.x[4]] <- "="
+    chrs[.x[2]:.x[4]] <- " "
     chrs[.x[2]] <- "["
     #chrs[.x[2]] <- "\u25D6"
     chrs[.x[4]] <- "]"
+    chrs[.x[2]] <- "\u2524"
+    chrs[.x[4]] <- "\u251C"
     #chrs[.x[4]] <- "\u25D7"
     #chrs[.x[3]] <- "\u26AB"
     #chrs[.x[3]] <- "\u253C"
-    chrs[.x[3]] <- "+"
+    #chrs[.x[3]] <- "\u25C6"
     #chrs[.x[3]] <- "\u25D9"
     #chrs[.x[3]] <- "\u25CF"
+    chrs[.x[3]] <- "+"
     ret <- paste(chrs, collapse="")
     return(ret)
   })
@@ -102,15 +110,15 @@
 
 
 
-#' Meaningful summary of data frames
+#' Meaningful summary of lists and data frames
 #'
-#' Meaningful, row-wise summary function for data frames
+#' Meaningful, row-wise summary function for lists and data frames
 #' 
 #' While this function is a summary method for objects of the colorDF
 #' class, it can also be applied to any other data frame-like object.
 #'
 #' The summary table has five columns and as many rows as there are columns
-#' in the summarized data frame. First four columns contain, respectively, 
+#' in the summarized data frame (or elements in a list). First four columns contain, respectively, 
 #' column name, column class (abbreviated as in [tibbles][tibble::tibble()]),
 #' number of unique values
 #' and number of missing values (`NA`'s). The contents of the fifth column depends on the
@@ -118,7 +126,7 @@
 #' 
 #' * first, any lists are unlisted
 #' * numeric columns (including integers) are summarized (see below)
-#' * for character vectors and factors, if all values are unique then this
+#' * for character vectors and factors, if all values are unique or missing (NA) then this
 #'   is stated explicitely
 #' * otherwise, for character vectors and factors, the values will be listed, starting with the most
 #'   frequent. The list will be shortened to fit the screen. 
@@ -126,6 +134,14 @@
 #' For numeric columns, by default the quantiles 0 (minimum), .25, .50 (median), .75
 #' and 1 (maximum) are shown. Following alternatives can be specified using
 #' the option `numformat`:
+#' 
+#' * "mean": mean +- standard deviation
+#' * "graphics": a graphical summary. Note that all numerical columns will
+#'    be scaled with the same parameter, so this option makes sense only if the
+#'    numerical columns are comparable. The graphics summary looks like
+#'    this: ---|  +  |---- and corresponds to a regular box plot, indicating the 
+#'    extremes and the three quartiles (- ... - indicates the data range, |...| the
+#'    interquartile range and '+' stands for the median).
 #'
 #' `summary_colorDF` is the exported version of this function to facilitate
 #' usage in cases when converting an object to a colorDF is not desirable.
@@ -133,6 +149,8 @@
 #'         information on a dataframe-like object.
 #' @param object a data frame (possibly a color data frame)
 #' @param digits number of significant digits to show
+#' @param numformat format of the summary for numerical values. Can be one
+#'        of "quantiles", "mean" and "graphics"
 #' @param ... passed to `summary_colorDF`
 #' @examples
 #' summary(colorDF(iris))
@@ -151,7 +169,7 @@
 #'     select(-row) %>%
 #'     summary_colorDF(numformat="g")
 #' }
-#' @importFrom stats quantile
+#' @importFrom stats quantile sd
 #' @export
 summary_colorDF <- function(object, numformat="quantiles", digits=getOption("digits")) {
   numformat <- match.arg(numformat, c("quantiles", "mean", "graphics"))
@@ -193,7 +211,7 @@ summary_colorDF <- function(object, numformat="quantiles", digits=getOption("dig
 
 
 
-#' @rdname summary.colorDF
+#' @rdname summary_colorDF
 #' @export
 summary.colorDF <- function(object, ...) {
   summary_colorDF(object, ...)

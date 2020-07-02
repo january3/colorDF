@@ -9,8 +9,34 @@ colorDF – colorful data frames in your terminal
 \details{
 colorDF allows you to view data frames using the color and styling
 capabilities of an ANSI terminal: 216 colors! 16 base colors! 24 shades of
-gray! Italic, bold, inverse \emph{and} underline! Well, this may not seem much, but in
-fact it allows at least some basic highlighting or coloring significant
+gray! Italic, bold, inverse \emph{and} underline! Well, OK, this may not seem much, but in
+fact it allows at highlighting, showing different column types or coloring significant
 p-values in red. Trust me, it is useful if you work a lot with huge data
 frames.
+
+colorDF does not really introduce a new type of a data frame; when
+applied to tibbles, data frames or data tables it does not change their
+behavior except for the print method. In other words, it is only a
+visualization layer on top of a data frame like object, which will
+otherwise work exactly as expected.
+
+To get started, continue with the \code{\link[=colorDF]{colorDF()}} help page.
+}
+\section{Known issues}{
+
+\itemize{
+\item In Rstudio, inverse does not work correctly (known bug in Rstudio 1.3)
+\item colorDF relies on the \link[crayon:crayon]{crayon} package. In certain
+instances, the crayon package will enforce only 8 basic colors even if more
+colors can be displayed. See the vignette of colorDF for an example and on
+how to deal with this issue.
+}
+}
+
+\seealso{
+\code{\link[=colorDF]{colorDF()}} on creating colorful data frames;
+\code{\link[=df_style]{df_style()}} on how to modify style of the colorful data frame;
+\code{\link[=col_type]{col_type()}} on how to change column types;
+\code{\link[=colorDF_themes]{colorDF_themes()}} to list all themes; \code{\link[=colorDF_themes_show]{colorDF_themes_show()}}
+to view all themes.
 }

@@ -12,7 +12,8 @@ format_col(
   format = TRUE,
   col_width = NULL,
   prefix = " ",
-  min.width = 5L
+  min.width = 5L,
+  max.width = NULL
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ format_col(
 \item{prefix}{prefix (column separator) to add to each element of x}
 
 \item{min.width}{minimum width of a column}
+
+\item{max.width}{maximum width of a column}
 }
 \description{
 Format a vector (data frame column) aligning, rounding the numbers and
