@@ -2,25 +2,39 @@
 % Please edit documentation in R/classes.R
 \name{colorDF}
 \alias{colorDF}
+\alias{as.colorDF}
 \title{Make a dataframe colorful}
 \usage{
 colorDF(x, theme = NULL)
+
+as.colorDF(x, ...)
 }
 \arguments{
 \item{x}{a data frame or similar object (e.g. tibble)}
 
 \item{theme}{Which theme to use}
+
+\item{...}{further arguments are passed to \code{\link[=colorDF]{colorDF()}}.}
 }
 \value{
-a colorful data frame – identical object but with the `.style`
-        attribute set.
+a colorful data frame – identical object but with the \code{.style}
+attribute set and class "colorDF" added.
 }
 \description{
 Make a dataframe colorful
 }
-\seealso{
-[colorDF_themes()] to list all themes; [colorDF_themes_show()]
-         to view all themes.
+\details{
+These functions turn any data frame like object (i.e. object which
+inherits the data.frame class, such as a \link[tibble:tibble]{tibble} or
+a \link[data.table:data.table]{data table}).
 
-[df_style()] on how to modify style of the colorful data frame
+\code{\link[=as.colorDF]{as.colorDF()}} calls \code{\link[=colorDF]{colorDF()}}; this function is only here for
+completeness.
+}
+\seealso{
+\link[=colorDF-package]{Introduction to the package};
+\code{\link[=df_style]{df_style()}} on how to modify style of the colorful data frame;
+\code{\link[=col_type]{col_type()}} on how to change column types;
+\code{\link[=colorDF_themes]{colorDF_themes()}} to list all themes; \code{\link[=colorDF_themes_show]{colorDF_themes_show()}}
+to view all themes.
 }

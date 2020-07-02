@@ -17,13 +17,13 @@ Demonstrate all defined themes
 suitable only for dark or light backgrounds, so this function is useful for
 choosing what looks best on your terminal.
 
-When a colorful data frame is created with [colorDF()] or [as.colorDF()],
+When a colorful data frame is created with \code{\link[=colorDF]{colorDF()}} or \code{\link[=as.colorDF]{as.colorDF()}},
 the default theme is assigned to it. The default theme is defined by the
-option "colorDF_theme" set using [options()] (at startup, the default theme
-is "light"). 
+option "colorDF_theme" set using \code{\link[=options]{options()}} (at startup, the default theme
+is "light").
 
 You can also specify the theme to use when making a data frame colorful
-with [colorDF()] by using the `theme=` parameter.
+with \code{\link[=colorDF]{colorDF()}} by using the \verb{theme=} parameter.
 }
 \examples{
 colorDF_themes_show()

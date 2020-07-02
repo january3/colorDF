@@ -28,6 +28,7 @@
 #' adding color.
 #' @param x a vector
 #' @param min.width minimum width of a column
+#' @param max.width maximum width of a column
 #' @param col_name optional: a column name (see Details)
 #' @param style A list with style definition
 #' @param format Whether the vector should be formatted and aligned
@@ -35,14 +36,16 @@
 #' @param df_style style for the whole data frame
 #' @param prefix prefix (column separator) to add to each element of x
 #' @export 
-format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE, col_width=NULL, prefix=" ", min.width=5L) {
+format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE, col_width=NULL, prefix=" ", min.width=5L, max.width=NULL) {
 
   if(is.null(style)) style <- list()
   if(!is.numeric(x)) { style$is.numeric <- NULL ; style$is.pval <- NULL } 
   if(is.null(col_name)) { col_name <- "" }
   digits <- style$digits %OR% df_style$digits %OR% getOption("digits")
-  if(!is.null(df_style$sep)) { prefix <- df_style$sep }
+  prefix <- df_style$sep %OR% prefix
+
   min.width <- as.integer(min.width)
+  max.width <- (as.integer(max.width) - nchar(prefix)) %OR% Inf
 
   x.ret <- as.character(x)
 
@@ -57,7 +60,14 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
   x.ret[is.na(x.ret)] <- "NA"
 
   if(is.null(col_width)) { col_width <- max(min.width, nchar(c(col_name, x.ret)), na.rm=TRUE) }
-  if(format)             { x.ret <- col_align(x.ret, width=col_width, align=style$align) }
+  if(max.width < min(col_width)) { col_width <- max.width }
+
+  if(format) { 
+    sel <- nchar(x.ret) > col_width
+    x.ret[sel] <- paste0(substr(x.ret[sel], 1, col_width - 1), "\u2026")
+    x.ret <- col_align(x.ret, width=col_width, align=style$align) 
+  }
+
 
   na <- style$fg_na %OR% df_style$fg_na
   if(any(is.na(x)) && !is.null(na)) {
@@ -98,10 +108,9 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
 
   ## standard key words: fg, bg, decoration
   x.ret <- .apply_style(x.ret, style)
-
   x.ret <- paste0(prefix, x.ret)
 
-  attr(x.ret, ".width") <- col_width
+  attr(x.ret, ".width") <- as.integer(col_width)
   return(x.ret)
 }
 

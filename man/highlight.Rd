@@ -15,7 +15,7 @@ highlight(x, sel)
 Highlight some rows in a data frame
 }
 \details{
-Uses [print.colorDF()] to highlight selected rows in a data frame.
+Uses \code{\link[=print.colorDF]{print.colorDF()}} to highlight selected rows in a data frame.
 }
 \examples{
 highlight(mtcars, mtcars$cyl == 6)

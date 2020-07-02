@@ -9,7 +9,7 @@ colorDF – colorful data frames in your terminal
 \details{
 colorDF allows you to view data frames using the color and styling
 capabilities of an ANSI terminal: 216 colors! 16 base colors! 24 shades of
-gray! Italic, bold, inverse *and* underline! Well, this may not seem much, but in
+gray! Italic, bold, inverse \emph{and} underline! Well, this may not seem much, but in
 fact it allows at least some basic highlighting or coloring significant
 p-values in red. Trust me, it is useful if you work a lot with huge data
 frames.

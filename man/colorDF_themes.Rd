@@ -13,5 +13,5 @@ A character vector with the names of the themes
 List all available themes for colorful data frames
 }
 \seealso{
-[colorDF_themes_show()] for a demonstration of all themes.
+\code{\link[=colorDF_themes_show]{colorDF_themes_show()}} for a demonstration of all themes.
 }

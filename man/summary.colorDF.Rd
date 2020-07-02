@@ -16,7 +16,7 @@ summary_colorDF(object, ...)
 }
 \value{
 A colorful data frame of class colorDF containing useful
-        information on a dataframe-like object.
+information on a dataframe-like object.
 }
 \description{
 Meaningful summary of data frames
@@ -25,7 +25,7 @@ Meaningful summary of data frames
 While this function is a summary method for objects of the colorDF
 class, it can also be applied to any other dataframe-like object.
 
-`summary_colorDF` is the exported version of this function to facilitate
+\code{summary_colorDF} is the exported version of this function to facilitate
 usage in cases when converting an object to a colorDF is not desirable.
 }
 \examples{

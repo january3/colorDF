@@ -17,72 +17,75 @@ df_style(x, element)
 \item{value}{one or more values to set}
 }
 \value{
-`df_style(x)` returns a list. Assignment results in a data frame
+\code{df_style(x)} returns a list. Assignment results in a data frame
 with a modified style.
 }
 \description{
 Get or set style of a colorful data frame
 }
 \details{
-Colorful data frames store the styles in the `.style` attribute of the
+Colorful data frames store the styles in the \code{.style} attribute of the
 data frame object. This attribute is a list with a number of keywords:
-
-* fg, bg, decoration: formatting styles to be applied to the whole table
-  (see "Formatting styles" below)
-* row.names, col.names, interleave: formatting styles for row names, table header and
-  every second line in the table. If these elements are NULL, no styles
-  will be applied. See "Formatting styles" below.
-* autoformat (logical): whether column type should be guessed from column names
-  (which allows automatically recognizing a column called "pvalue" as a
-  p-value and color significant cells.
-* col.styles: a list mapping the column names to formatting styles. 
-* col.types: a list mapping the column names to column types. For example,
-  if it is `list(result="pval")`, then the column with name "result" will
-  be considered to be a p-value and styled accordingly.
-* type.styles: a list mapping column types to formatting styles. See "Column types"
-  below.
-* fixed.width: if not NULL, all columns have the same width
-* sep: string separating the columns 
-* digits: how many digits to use
-* tibble.style: if not NULL, cut off columns that do not fit the width
+\itemize{
+\item fg, bg, decoration: formatting styles to be applied to the whole table
+(see "Formatting styles" below)
+\item row.names, col.names, interleave: formatting styles for row names, table header and
+every second line in the table. If these elements are NULL, no styles
+will be applied. See "Formatting styles" below.
+\item autoformat (logical): whether column type should be guessed from column names
+(which allows automatically recognizing a column called "pvalue" as a
+p-value and color significant cells.
+\item col.styles: a list mapping the column names to formatting styles.
+\item col.types: a list mapping the column names to column types. For example,
+if it is \code{list(result="pval")}, then the column with name "result" will
+be considered to be a p-value and styled accordingly.
+\item type.styles: a list mapping column types to formatting styles. See "Column types"
+below.
+\item fixed.width: if not NULL, all columns have the same width
+\item sep: string separating the columns
+\item digits: how many digits to use
+\item tibble.style: if not NULL, cut off columns that do not fit the width
+}
 }
 \section{Formatting styles}{
 
 
 Each formatting style is a list describing style of the formatting and
 coloring the text elements. Following elements of that list are recognized:
-
- * fg, bg: foreground and background colors specified as R name (use
-   `colors()` to get available colors) or HTML hexadicimal code 
- * fg_sign: for p-values, foreground color for significant 
-   values
- * fg_true, fg_false: foreground colors for logical vectors
- * fg_neg: for numeric values, foreground color for negative values
- * fg_na: color for NA values
- * is.pval: whether the values are to be treated as p-values
- * is.numeric: whether the values are to be treated as numeric
- * align: how the values should be aligned (right, left or center)
- * sign.thr: for p-values, the threshold of significance
- * digits: how many digits to use
- * decoration: a character vector which may include the following key
-   words: inverse, bold, italic
+\itemize{
+\item fg, bg: foreground and background colors specified as R name (use
+\code{colors()} to get available colors) or HTML hexadicimal code
+\item fg_sign: for p-values, foreground color for significant
+values
+\item fg_true, fg_false: foreground colors for logical vectors
+\item fg_neg: for numeric values, foreground color for negative values
+\item fg_na: color for NA values
+\item is.pval: whether the values are to be treated as p-values
+\item is.numeric: whether the values are to be treated as numeric
+\item align: how the values should be aligned (right, left or center)
+\item sign.thr: for p-values, the threshold of significance
+\item digits: how many digits to use
+\item decoration: a character vector which may include the following key
+words: inverse, bold, italic
+}
 }
 
 \section{Column types}{
 
 
 Rather than directly assigning a style to a column (which is possible
-using the `col.styles` element) it is preferable to change a style
+using the \code{col.styles} element) it is preferable to change a style
 associated with a column type. Several such types are defined in the
 default styles:
-
- * character
- * numeric
- * integer
- * factor
- * identifier
- * pval
- * default
+\itemize{
+\item character
+\item numeric
+\item integer
+\item factor
+\item identifier
+\item pval
+\item default
+}
 }
 
 \examples{
@@ -103,5 +106,5 @@ df_style(df) <- list(interleave=list(fg="#FFFFFF", bg="blue"),
 
 }
 \seealso{
-[print.colorDF()] on printing options
+\code{\link[=print.colorDF]{print.colorDF()}} on printing options
 }

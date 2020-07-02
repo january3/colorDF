@@ -99,6 +99,7 @@ cl2ids <- function(classes) {
 #'  * factor
 #'  * identifier
 #'  * pval
+#'  * match
 #'  * default
 #' @return `df_style(x)` returns a list. Assignment results in a data frame
 #' with a modified style.

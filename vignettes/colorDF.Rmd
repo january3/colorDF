@@ -39,7 +39,7 @@ assignInNamespace("num_colors", num_colors, pos="package:crayon")
 
 ```{r setup,echo=FALSE,results="hide",include=FALSE}
 library(colorDF)
-library(tidyverse)
+library(dplyr)
 library(data.table)
 ```
 
