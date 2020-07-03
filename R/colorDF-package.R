@@ -24,12 +24,48 @@
 #'    colors can be displayed. See the vignette of colorDF for an example and on
 #'    how to deal with this issue.
 #' 
-#' @seealso [colorDF()] on creating colorful data frames;
+#' @seealso [colorDF()] on creating colorful data frames; [global options][colorDF-global-options] for colorDF;
 #'          [df_style()] on how to modify style of the colorful data frame; 
 #'          [col_type()] on how to change column types;
 #'          [colorDF_themes()] to list all themes; [colorDF_themes_show()]
 #'          to view all themes.
 #' @name colorDF-package
+NULL
+
+#' Global options for colorDF
+#' 
+#' The behavior of colorful data frames can be influenced by a number of
+#' global options set with [options()].
+#'
+#' The following global options are interpreted by functions in the colorDF
+#' package:
+#'
+#' 
+#' * `colorDF_n` (default: `20`): how many rows at maximum are printed (set to
+#'   `Inf` to always show all rows).
+#' * `colorDF_theme` (default: `"light"`): theme assigned by default to the new
+#'   objects by [colorDF()] (and also when passing a data frame directly to
+#'   [summary_colorDF()]).
+#' * `colorDF_tibble_style` (default: `FALSE`): if `TRUE`, then only column
+#'   will be shown which fit on the screen (much like in the default print method
+#'   for [tibbles][tibble::tibble()].
+#' * `colorDF_noitalic` (default: `FALSE`): some terminals do not support
+#'   italics and instead use video inverse. This will make some styles look
+#'   really weird. If this option is set to `TRUE` at time that the colorDF
+#'   package is loaded, then the italic style will be silently ignored.
+#'   Changing this option will have no effect when set after the package is loaded, 
+#'   so best put it in your `.Rprofile`.
+#' * `colorDF_sep`: separator for the table columns
+#' * `width`: width of the terminal in characters
+#' @seealso [colorDF()] on creating colorful data frames; 
+#'          [df_style()] on how to modify style of the colorful data frame; 
+#'          [colorDF_themes()] to list all themes; [colorDF_themes_show()]
+#'          to view all themes.
+#' @examples
+#' ## use the dark theme for a terminal with dark background
+#' options(colorDF_theme="dark")
+#' colorDF(mtcars)
+#' @name colorDF-global-options
 NULL
 
 ## environment holding some global configuration options

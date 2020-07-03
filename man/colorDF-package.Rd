@@ -34,7 +34,7 @@ how to deal with this issue.
 }
 
 \seealso{
-\code{\link[=colorDF]{colorDF()}} on creating colorful data frames;
+\code{\link[=colorDF]{colorDF()}} on creating colorful data frames; \link[=colorDF-global-options]{global options} for colorDF;
 \code{\link[=df_style]{df_style()}} on how to modify style of the colorful data frame;
 \code{\link[=col_type]{col_type()}} on how to change column types;
 \code{\link[=colorDF_themes]{colorDF_themes()}} to list all themes; \code{\link[=colorDF_themes_show]{colorDF_themes_show()}}
