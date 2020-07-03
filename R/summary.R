@@ -163,9 +163,9 @@
 #'   iris %>% 
 #'     mutate(row=rep(1:50, 3)) %>% 
 #'     gather(key="parameter", value="Size", 1:4)  %>%
-#'     mutate(sp.pa=paste(parameter, Species, sep=".")) %>% 
-#'     select(row, sp.pa, Size) %>% 
-#'     spread(key=sp.pa, value=Size) %>% 
+#'     mutate(pa.sp=paste(parameter, Species, sep=".")) %>% 
+#'     select(row, pa.sp, Size) %>% 
+#'     spread(key=pa.sp, value=Size) %>% 
 #'     select(-row) %>%
 #'     summary_colorDF(numformat="g")
 #' }
