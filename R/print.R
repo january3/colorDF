@@ -334,7 +334,7 @@ print_colorDF <- function(x, n=getOption("colorDF_n"), width=getOption("width"),
       }
     }
 
-    if(!is.null(style[["interleave"]])) {
+    if(n > 1 && !is.null(style[["interleave"]])) {
       sel <- seq(2, n, by=2)
       rows[ sel ] <- format_col(rows[sel], style=style[["interleave"]], format=FALSE, prefix="")
     }
