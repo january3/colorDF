@@ -1,6 +1,13 @@
 ## combines cat and sprintf
 .catf <- function(x, ...) cat(sprintf(x, ...))
 
+## combines cat and sprintf, plus a newline
+.catfn <- function(x, ...) {
+  .catf(x, ...)
+  cat("\n")
+}
+
+
 ## replaces null/na values by a default
 ## usage: x %OR% y
 `%OR%` <- function(x, y) {

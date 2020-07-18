@@ -8,6 +8,7 @@
     id         = "light",
     digits     = 2,
     fg_na      = "grey50",
+    terminal   = "light",
     col.names  = list(bg="deepskyblue4", fg="white", decoration="bold", align="center"),
     row.names  = list(decoration="italic", fg="grey"),
     interleave = list(bg="grey94", grey=TRUE),
@@ -81,6 +82,7 @@
     id         = "dark",
     digits     = 2,
     fg_na      = "grey50",
+    terminal   = "dark",
     highlight  = list(bg="#005FFF"),
     col.names  = list(bg="#0000D7", fg="white", decoration="bold", align="center"),
     row.names  = list(decoration="italic", fg="grey"),
@@ -101,6 +103,7 @@
 
   bw=list(
     description = "Black and white only. Suitable for black on white terminals",
+    terminal   = "light",
     sep         = "\u2502",
     id          = "bw",
     digits     = 2,
@@ -125,6 +128,7 @@
 
   wb=list(
     description = "Black and white only. Suitable for white on black terminals",
+    terminal   = "dark",
     sep         = "\u2502",
     id          = "wb",
     digits     = 2,
@@ -187,17 +191,29 @@ colorDF_themes <- function() {
 #' You can also specify the theme to use when making a data frame colorful
 #' with [colorDF()] by using the `theme=` parameter.
 #' @param themes character vector with theme names to show
+#' @param force_bg force background to "white" for light themes and "black" for dark themes
 #' @examples
 #' colorDF_themes_show()
 #' colorDF_themes_show(themes=c("wb", "bw"))
 #' @export
-colorDF_themes_show <- function(themes=NULL) {
+colorDF_themes_show <- function(themes=NULL, force_bg=FALSE) {
   .themes <- .theme_env[[".themes"]]
   themes <- .themes[ names(.themes) %in% themes ] %OR% .themes
 
   for(n in setdiff(names(themes), "default")) {
     .catf("Theme %s - %s:\n", n, themes[[n]]$description %OR% "no description")
-    print(colorDF(.example_colorDF, theme=n), highlight=c(FALSE, FALSE, TRUE))
+
+    if(force_bg && !is.null(themes[[n]]$terminal)) {
+
+      if(themes[[n]]$terminal == "dark") {
+        print(colorDF(.example_colorDF, theme=n), highlight=c(FALSE, FALSE, TRUE), fg="#FFFFFF", bg="black")
+      } else if(themes[[n]]$terminal == "light") {
+        print(colorDF(.example_colorDF, theme=n), highlight=c(FALSE, FALSE, TRUE), fg="black", bg="#FFFFFF")
+      } 
+    } else {
+      print(colorDF(.example_colorDF, theme=n), highlight=c(FALSE, FALSE, TRUE))
+    }
+
     cat("\n")
   }
 

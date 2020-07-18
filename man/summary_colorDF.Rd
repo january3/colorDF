@@ -5,7 +5,12 @@
 \alias{summary.colorDF}
 \title{Meaningful summary of lists and data frames}
 \usage{
-summary_colorDF(object, numformat = "quantiles", digits = getOption("digits"))
+summary_colorDF(
+  object,
+  numformat = "quantiles",
+  digits = getOption("digits"),
+  width = getOption("width")
+)
 
 \method{summary}{colorDF}(object, ...)
 }
@@ -16,6 +21,8 @@ summary_colorDF(object, numformat = "quantiles", digits = getOption("digits"))
 of "quantiles", "mean" and "graphics"}
 
 \item{digits}{number of significant digits to show}
+
+\item{width}{width of the summary table in characters}
 
 \item{...}{passed to \code{summary_colorDF}}
 }

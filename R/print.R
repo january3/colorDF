@@ -25,7 +25,7 @@
     header <- format_col(header, style=style[["col.names"]], format=FALSE, prefix="")
     header <- format_col(header, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
     rnh    <- format_col("", style=style[["col.names"]], col_width=row.names.w, prefix="")
-    header <- paste0(rnh, header, "\n")
+    header <- paste0(rnh, header)
     return(header)
   } else {
     return("")
@@ -38,7 +38,7 @@
   header <- paste(ids, collapse="")
   header <- format_col(header, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
   rnh    <- format_col("", col_width=row.names.w, prefix="")
-  header <- paste0(rnh, header, "\n")
+  header <- paste0(rnh, header)
   return(header)
 }
 
@@ -250,6 +250,8 @@ print.colorDF <- function(x, ...) {
 #' @param highlight a logical vector indicating which rows to highlight
 #' @param tibble_style whether to print with tibble style (overrides style setting)
 #' @param sep column separator string (overrides style setting)
+#' @param bg set default background for the table
+#' @param fg set default foreground for the table
 #' @param ... further arguments are ignored
 #' @import crayon
 #' @importFrom purrr map map_int map_chr map2_chr map_lgl
@@ -281,6 +283,8 @@ print_colorDF <- function(x,
   tibble_style=getOption("colorDF_tibble_style"),
   highlight=NULL,
   sep=getOption("colorDF_sep"),
+  bg=NULL,
+  fg=NULL,
   ...) {
 
   if(is.null(n)) n <- 20
@@ -296,6 +300,7 @@ print_colorDF <- function(x,
   tibble_style <- .is_tibble_style(tibble_style, style)
 
   comment_style <- list(fg="silver", decoration="italic")
+  #if(!is.null(bg)) { comment_style$bg <- bg }
 
   name <- "Data frame"
   if(inherits(x, "colorDF")) {
@@ -306,9 +311,9 @@ print_colorDF <- function(x,
     name <- "Data table"
   }
 
-  .catf(.apply_style("# %s %d x %d:\n", comment_style), name, nc, nr)
+  ret <- sprintf(.apply_style("# %s %d x %d:", comment_style), name, nc, nr)
   if(n < nr && nc > 0) { 
-    .catf(.apply_style("# (Showing rows 1 - %d out of %d)\n", comment_style), n, nr)
+    ret <- ret %+% '\n' %+% sprintf(.apply_style("# (Showing rows 1 - %d out of %d)", comment_style), n, nr)
   }
 
   hidden <- .hidden_cols(x)
@@ -319,31 +324,41 @@ print_colorDF <- function(x,
     gn   <- names(df_groups)[ -ncol(df_groups) ]
     gnum <- nrow(df_groups)
     gn   <- paste(gn, collapse=", ")
-    .catf(.apply_style("# Groups: %s [%d]\n", comment_style), gn, gnum)
+    ret <- ret %+% sprintf(.apply_style("# Groups: %s [%d]", comment_style), gn, gnum)
+    ret <- ret %+% '\n'
   }
 
   x <- head(x, n)
   if(!is.null(highlight)) highlight <- head(highlight, n)
 
   if(nc > 0) {
-    ret <- .print_df(x, style, highlight, n, row.names, width, tibble_style) 
+    ret <- ret %+% .print_df(x, style, highlight, n, row.names, width, tibble_style, comment_style) 
   } else {
-    ret <- .apply_style("# No columns in the data frame", comment_style) %+% "\n"
+    ret <- ret %+% "\n" %+% .apply_style("# No columns in the data frame", comment_style)
   }
 
   if(length(hidden) > 0) {
     msg <- sprintf("# Hidden columns (%d): %s", length(hidden), paste(hidden, collapse=", "))
     msg <- .apply_style(msg, comment_style)
-    ret <- ret %+% msg %+% "\n"
+    ret <- ret %+% '\n' %+% msg
   }
 
-  cat(ret)
+  if(!is.null(bg)) {
+    ret <- .apply_style(ret, list(bg=bg))
+  }
+
+  if(!is.null(fg)) {
+    ret <- .apply_style(ret, list(fg=fg))
+  }
+
+
+  cat(ret %+% '\n')
   return(invisible(ret))
 }
 
 
 ## actual printing of the data frame
-.print_df <- function(x, style, highlight=NULL, n=20, row.names=TRUE, width=70, tibble_style=FALSE) {
+.print_df <- function(x, style, highlight=NULL, n=20, row.names=TRUE, width=70, tibble_style=FALSE, comment_style=NULL) {
 
   c.names <- colnames(x)
   r.names <- .get_rownames(x, row.names)
@@ -387,7 +402,7 @@ print_colorDF <- function(x,
   ## any slots not shown in the tibble style?
   if(tibble_style && any(slots != 1)) { 
     msg <- .tibble_message(slots, c.names, classes, comment_style) 
-    ret <- ret %+% msg %+% "\n"
+    ret <- ret %+% "\n" %+% msg
   }
 
 
@@ -408,14 +423,14 @@ print_colorDF <- function(x,
   for(sl in 1:nslots) {
     sel <- slots == sl
 
-    ret <- ret %+% .make_header(c.names[ sel ], row.names.w, cols.w[ sel ], style)
+    ret <- ret %+% '\n' %+% .make_header(c.names[ sel ], row.names.w, cols.w[ sel ], style)
 
     if(tibble_style) {
-      ret <- ret %+% .make_header_tibble(classes[ sel ], row.names.w, cols.w[sel], style)
+      ret <- ret %+% '\n' %+% .make_header_tibble(classes[ sel ], row.names.w, cols.w[sel], style)
     }
 
     if(n > 0) {
-      ret <- ret %+% .print_single_row(n, x, slots==sl, style, highlight, r.names)
+      ret <- ret %+% '\n' %+% .print_single_row(n, x, slots==sl, style, highlight, r.names)
     }
   }
   return(ret)
@@ -450,6 +465,6 @@ print_colorDF <- function(x,
     rows <- format_col(rows, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
 
     ret <- paste(rows, collapse="\n")
-    ret <- ret %+% "\n"
+    #ret <- ret %+% "\n"
     return(ret)
 }

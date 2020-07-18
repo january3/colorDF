@@ -2,10 +2,15 @@
 % Please edit documentation in R/colorDF-package.R
 \name{colorDF-global-options}
 \alias{colorDF-global-options}
+\alias{colorDF_options}
 \title{Global options for colorDF}
+\usage{
+colorDF_options()
+}
 \description{
 The behavior of colorful data frames can be influenced by a number of
-global options set with \code{\link[=options]{options()}}.
+global options set with \code{\link[=options]{options()}}. All options and their defaults can be viewed with
+\code{colorDF_options()}.
 }
 \details{
 The following global options are interpreted by functions in the colorDF

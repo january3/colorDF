@@ -15,7 +15,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = ""
+  comment = "",
+  R.options=list(width=100)
 )
 ```
 
@@ -127,10 +128,18 @@ sw
 
 Note that changing the column type **does not** change the class of the
 column in the data frame! colorDF never touches the data frame contents,
-the only operations concern the ".style" and ".coltp" attributes. So while
-you may set a column type to "character" instead of "factor", even though
-it will be looking like a character type on the terminal output, the
+the only operations concern the "class", ".style" and ".coltp" attributes.
+So while you may set a column type to "character" instead of "factor", even
+though it will be looking like a character type on the terminal output, the
 column class will still be a factor.
+
+You can also hide a column:
+
+```{r}
+sw <- colorDF(starwars)
+col_type(sw, c("vehicles", "films", "starships")) <- "hidden"
+sw
+```
 
 # Styles and Themes
 
@@ -147,10 +156,11 @@ colorDF(sw, theme="bw")
 ```
 
 Here is an overview of the themes. Some of them are intended for dark
-background and will not look great below:
+background and will not look great on a light background, which is why we
+use `force_bg=TRUE` to force black on white background for these themes:
 
 ```{r}
-colorDF_themes_show()
+colorDF_themes_show(force_bg=TRUE)
 ```
 
 You can add your own themes using `add_colorDF_theme()` (see the example
@@ -170,7 +180,9 @@ If interested, read the help file for `df_style()`.
 
 # Utilities
 
-colorDF comes with two utility functions. Firstly, it defines a summary
+## Summaries
+
+colorDF comes with a couple of utility functions. Firstly, it defines a summary
 method for colorful data frames which can also be used for any other data
 frame like object and which I find much more useful than the regular
 summary:
@@ -185,6 +197,35 @@ called `summary_colorDF`:
 ```{r eval=FALSE}
 starwars %>% summary_colorDF
 ```
+
+As you can see, the summary is much more informative than the default
+`summary.data.frame` function. Not only this, but the object does not need
+to be a data frame – any list can do!
+
+```{r summary_mtcars,eval=TRUE}
+mtcars_cyl <- split(mtcars$mpg, mtcars$cyl)
+sapply(mtcars_cyl, length)
+```
+
+The list `mtcars_cyl` is the miles per gallon column split by number of
+cylinders. We can use `summary_colorDF` to create a (semi)graphical summary
+of this list:
+
+```{r summary_mtcars2,eval=TRUE}
+summary_colorDF(mtcars_cyl, numformat="g", width=90)
+```
+
+In fact, this is so useful (especially if an interactive graphic device is
+not practical, e.g. when running R over ssh/screen) that I implemented a
+terminal boxplotting function:
+
+```{r summary_iris}
+term_boxplot(Sepal.Length ~ Species, data=iris, width=90)
+```
+
+
+
+## Highlighting
 
 The `highlight()` function allows to mark selected rows from the table:
 
@@ -228,19 +269,19 @@ rm(print.data.frame, print.tbl, print.data.table)
 
 # Global options
 
-There are two global options which override whatever has been defined in
-a particular theme / style.
+There is a number of options which override whatever has been defined in
+a particular theme / style. You can view them with `colorDF_options()`:
 
- * `colorDF_tibble_style`: if not NULL, tibble conventions will be used
-   (i.e., show only columns which fit on the screen and create a subheader
-   with column classes)
- * `colorDF_sep`: column separator string 
- * `colorDF_n`: how many rows to show on the screen
+```{r alloptions,eval=TRUE,results="markdown",R.options=list(width=100)}
+colorDF_options()
+```
 
-For example, 
+
+To change these options, use  `options()` just like with any other global
+option. For example, 
 
 ```{r problemchild, eval=TRUE,results="markdown"}
-options(colorDF_tibble_style="yes please")
+options(colorDF_tibble_style=TRUE)
 options(colorDF_sep= " ")
 options(colorDF_n=5)
 colorDF(starwars)

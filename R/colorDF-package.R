@@ -77,7 +77,7 @@ colorDF_options <- function() {
 'Option\tDescription\tDefault
 colorDF_n\tNumber of rows to show\t20
 colorDF_noitalic\tSuppress italics (read on loading)\tFALSE
-colorDF_tibble_style\tShow only rows and numbers wich fit on the screen\tFALSE
+colorDF_tibble_style\tBehave like tibble\tFALSE
 colorDF_sep\tColumn separator\t" "
 colorDF_theme\tcolorDF theme to use\tlight
 width\tWidth of the terminal\tgetOption("width")
@@ -85,7 +85,7 @@ width\tWidth of the terminal\tgetOption("width")
 
   curr <- sapply(df$Option, function(x) {
     .cur <- getOption(x)
-    if(is.null(.cur)) .cur <- "NULL"
+    if(is.null(.cur)) .cur <- "Not set"
     if(.cur == " ") {
       .cur <- '" "'
     }
