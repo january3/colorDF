@@ -15,6 +15,8 @@ print_colorDF(
   tibble_style = getOption("colorDF_tibble_style"),
   highlight = NULL,
   sep = getOption("colorDF_sep"),
+  bg = NULL,
+  fg = NULL,
   ...
 )
 }
@@ -35,6 +37,10 @@ value can be set with options("colorDF_n"))}
 \item{highlight}{a logical vector indicating which rows to highlight}
 
 \item{sep}{column separator string (overrides style setting)}
+
+\item{bg}{set default background for the table}
+
+\item{fg}{set default foreground for the table}
 }
 \description{
 This is the core of the colorDF package – a print method for the colorful (and other) data frames.

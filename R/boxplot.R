@@ -9,6 +9,7 @@
 #' @examples
 #' term_boxplot(mpg ~ cyl, data=mtcars)
 #' term_boxplot(Sepal.Length ~ Species, data=iris, width=70)
+#' @importFrom stats model.frame terms
 #' @export
 term_boxplot <- function(formula, data=NULL, width=getOption("width")) {
   if (missing(formula)) {

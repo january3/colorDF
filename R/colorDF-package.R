@@ -70,6 +70,7 @@ NULL
 NULL
 
 #' @rdname colorDF-global-options
+#' @importFrom utils read.table
 #' @export
 colorDF_options <- function() {
 

@@ -4,10 +4,12 @@
 \alias{colorDF_themes_show}
 \title{Demonstrate all defined themes}
 \usage{
-colorDF_themes_show(themes = NULL)
+colorDF_themes_show(themes = NULL, force_bg = FALSE)
 }
 \arguments{
 \item{themes}{character vector with theme names to show}
+
+\item{force_bg}{force background to "white" for light themes and "black" for dark themes}
 }
 \description{
 Demonstrate all defined themes
