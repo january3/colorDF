@@ -49,8 +49,11 @@
     r.names <- rep("", nrow(x))
   }
 
-  row.names.w <- max(nchar(r.names))
-  r.names <- col_align(r.names, row.names.w, align="right")
+  if(length(r.names) > 0) {
+    row.names.w <- max(nchar(r.names))
+    r.names <- col_align(r.names, row.names.w, align="right")
+  } 
+
   return(r.names)
 }
 
@@ -152,6 +155,50 @@
   return(col_styles)
 }
 
+## print a message similar to print.tbl
+.tibble_message <- function(slots, c.names, classes, comment_style) {
+  msg <- sprintf("# %d more columns: ", sum(slots != 1))
+  
+  ##sprintf(silver $ italic ("# %d more columns: "), sum(slots != 1))
+  if(!is.null(c.names)) {
+    msg <- msg %+% 
+      paste(sprintf("%s (%s)", c.names[ slots != 1 ],
+                               cl2ids(classes[ slots != 1 ])),
+                               collapse=", ")
+  }
+  msg <- .apply_style(msg, comment_style)
+	return(msg)
+}
+
+
+.is_tibble_style <- function(tibble_style, style) {
+
+  ## if we have explicit information, use it 
+  ## otherwise, is style[["tibble_style"]] true?
+  ## both variables can be NULL, hence the %OR%
+  if((tibble_style %OR% FALSE) ||
+     is.null(tibble_style) && (style[["tibble_style"]] %OR% FALSE)) {
+    tibble_style <- TRUE
+  } else {
+    tibble_style <- FALSE
+  }
+
+  return(tibble_style)
+}
+
+.hidden_cols <- function(x) {
+  col_types_predef <- attr(x, ".coltp")
+  if(is.null(col_types_predef)) {
+    return(c())
+  }
+
+  hidden <- sapply(names(col_types_predef), function(x) {
+    "hidden" %in% col_types_predef[[x]]
+  })
+
+  return(names(col_types_predef)[hidden])
+}
+
 #' @rdname print_colorDF
 #' @export
 print.colorDF <- function(x, ...) {
@@ -227,7 +274,9 @@ print.colorDF <- function(x, ...) {
 #'     starwars %>% print_colorDF(tibble_style=TRUE, sep=" |%%| ")
 #' }
 #' @export
-print_colorDF <- function(x, n=getOption("colorDF_n"), width=getOption("width"), 
+print_colorDF <- function(x, 
+  n=getOption("colorDF_n"), 
+  width=getOption("width"), 
   row.names=TRUE, 
   tibble_style=getOption("colorDF_tibble_style"),
   highlight=NULL,
@@ -243,13 +292,10 @@ print_colorDF <- function(x, n=getOption("colorDF_n"), width=getOption("width"),
   style$sep <- sep %OR% style$sep %OR% " "
   sep.length <- nchar(style$sep)
 
-  if((!is.null(tibble_style) && tibble_style == TRUE) ||
-     is.null(tibble_style) && !is.null(style[["tibble_style"]]) &&
-     style[["tibble_style"]] == TRUE) {
-    tibble_style <- TRUE
-  } else {
-    tibble_style <- FALSE
-  }
+
+  tibble_style <- .is_tibble_style(tibble_style, style)
+
+  comment_style <- list(fg="silver", decoration="italic")
 
   name <- "Data frame"
   if(inherits(x, "colorDF")) {
@@ -260,17 +306,54 @@ print_colorDF <- function(x, n=getOption("colorDF_n"), width=getOption("width"),
     name <- "Data table"
   }
 
-  .catf("# %s %d x %d:\n", name, nc, nr)
-  if(n < nr) { .catf(silver $ italic("(Showing rows 1 - %d out of %d)\n"), n, nr) }
+  .catf(.apply_style("# %s %d x %d:\n", comment_style), name, nc, nr)
+  if(n < nr) { 
+  #  .catf(silver $ italic("(Showing rows 1 - %d out of %d)\n"), n, nr) 
+    .catf(.apply_style("# (Showing rows 1 - %d out of %d)\n", comment_style), n, nr)
+  }
 
-  c.names <- colnames(x)
+  hidden <- .hidden_cols(x)
+  x <- x[ , ! names(x) %in% hidden, drop=FALSE ]
+
+  ## grouped_df is a class added when tibble groups the data
+  if("grouped_df" %in% class(x) && !is.null(df_groups <- attr(x, "groups"))) {
+    gn   <- names(df_groups)[ -ncol(df_groups) ]
+    gnum <- nrow(df_groups)
+    gn   <- paste(gn, collapse=", ")
+    .catf(.apply_style("# Groups: %s [%d]\n", comment_style), gn, gnum)
+  }
 
   x <- head(x, n)
   if(!is.null(highlight)) highlight <- head(highlight, n)
 
+  if(nc > 0) {
+    ret <- .print_df(x, style, highlight, n, row.names, width, tibble_style) 
+  } else {
+    ret <- .apply_style("# No columns in the data frame", comment_style) %+% "\n"
+  }
+
+  if(length(hidden) > 0) {
+    msg <- sprintf("# Hidden columns (%d): %s", length(hidden), paste(hidden, collapse=", "))
+    msg <- .apply_style(msg, comment_style)
+    ret <- ret %+% msg %+% "\n"
+  }
+
+  cat(ret)
+  return(invisible(ret))
+}
+
+
+## actual printing of the data frame
+.print_df <- function(x, style, highlight=NULL, n=20, row.names=TRUE, width=70, tibble_style=FALSE) {
+
+  c.names <- colnames(x)
   r.names <- .get_rownames(x, row.names)
-  row.names.w <- max(nchar(r.names))
-  width <- width - max(nchar(r.names))
+  if(n > 0) {
+    row.names.w <- max(nchar(r.names))
+    width <- width - max(nchar(r.names))
+  } else {
+    row.names.w <- 0
+  }
 
   nx <- length(x)
 
@@ -300,13 +383,28 @@ print_colorDF <- function(x, n=getOption("colorDF_n"), width=getOption("width"),
     r.names <- format_col(r.names, style=style[["row.names"]], prefix="", format=FALSE)
   }
 
-  ## color columns according to style
+  ret <- .print_df_rows(x, n, slots, c.names, cols.w, row.names.w, r.names, style, classes, tibble_style, highlight) 
+
+  ## any slots not shown in the tibble style?
+  if(tibble_style && any(slots != 1)) { 
+    msg <- .tibble_message(slots, c.names, classes, comment_style) 
+    ret <- ret %+% msg %+% "\n"
+  }
+
+
+  return(ret)
+}
+
+
+
+
+.print_df_rows <- function(x, n, slots, c.names, cols.w, row.names.w, r.names, style, classes, tibble_style=FALSE, highlight=NULL) {
+  ret <- ""
 
   nslots <- max(slots)
 
   if(tibble_style) { nslots <- 1 }
 
-  ret <- ""
 
   for(sl in 1:nslots) {
     sel <- slots == sl
@@ -345,21 +443,6 @@ print_colorDF <- function(x, n=getOption("colorDF_n"), width=getOption("width"),
     ret <- ret %+% paste(rows, collapse="\n")
     ret <- ret %+% "\n"
   }
+  return(ret)
 
-  if(tibble_style && any(slots != 1)) { 
-    ret <- ret %+% sprintf(silver $ italic ("# %d more columns: "), sum(slots != 1))
-    if(!is.null(c.names)) {
-      ret <- ret %+% sprintf(silver $ italic(
-        paste(sprintf("%s (%s)", c.names[ slots != 1 ],
-                                 cl2ids(classes[ slots != 1 ])),
-                                 collapse=", ")
-      ))
-    }
-    ret <- ret %+% "\n"
-  }
-
-  cat(ret)
-  return(invisible(ret))
 }
-
-
