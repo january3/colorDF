@@ -307,8 +307,7 @@ print_colorDF <- function(x,
   }
 
   .catf(.apply_style("# %s %d x %d:\n", comment_style), name, nc, nr)
-  if(n < nr) { 
-  #  .catf(silver $ italic("(Showing rows 1 - %d out of %d)\n"), n, nr) 
+  if(n < nr && nc > 0) { 
     .catf(.apply_style("# (Showing rows 1 - %d out of %d)\n", comment_style), n, nr)
   }
 
@@ -415,9 +414,19 @@ print_colorDF <- function(x,
       ret <- ret %+% .make_header_tibble(classes[ sel ], row.names.w, cols.w[sel], style)
     }
 
+    if(n > 0) {
+      ret <- ret %+% .print_single_row(n, x, slots==sl, style, highlight, r.names)
+    }
+  }
+  return(ret)
+
+}
+
+.print_single_row <- function(n, x, slots_sel, style, highlight=NULL, r.names=NULL) {
+
     rows <- map_chr(1:n, ~ {
       i <- .x
-      paste(map_chr(x[ slots == sl ], ~ .x[[i]]), collapse="")
+      paste(map_chr(x[ slots_sel ], ~ .x[[i]]), collapse="")
     })
 
     rows <- paste0(r.names, rows)
@@ -440,9 +449,7 @@ print_colorDF <- function(x,
     ## global data frame style
     rows <- format_col(rows, style=list(fg=style[["fg"]], bg=style[["bg"]], decoration=style[["decoration"]]), format=FALSE, prefix="")
 
-    ret <- ret %+% paste(rows, collapse="\n")
+    ret <- paste(rows, collapse="\n")
     ret <- ret %+% "\n"
-  }
-  return(ret)
-
+    return(ret)
 }
