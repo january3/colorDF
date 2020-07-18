@@ -7,6 +7,9 @@
 .graphic_summary <- function(x, summary, digits, width) {
 
   sel <- map_lgl(x, ~ is.numeric(.) & !all(is.na(.))) #& map_lgl(x, ~ !all(is.na(.)))
+  uq_vals <- map_lgl(x, ~ length(unique(.)) > 1)
+  sel <- sel & uq_vals
+
 
   ## no suitable numeric values
   if(sum(sel) == 0) return(summary)
@@ -54,7 +57,13 @@
 }
 
 .num_summary <- function(x, numformat, digits) {
-  if(all(is.na(x))) return("All values missing")
+  if(all(is.na(x))) {
+    return("All values missing")
+  }
+
+  if(length(uq <- unique(x)) == 1L) {
+    return(format(uq, digits=digits))
+  }
 
   if(numformat == "quantiles") {
     qq <- quantile(x, na.rm=TRUE)
@@ -72,8 +81,14 @@
 }
 
 .chr_summary <- function(x, width) {
-  if(length(unique(x)) == length(x)) 
+  if(length(uq <- unique(x)) == 1L) {
+    return(paste0("Only one value: ", uq))
+  }
+
+  if(length(unique(x)) == length(x)) {
     return("All values unique")
+  }
+
 
   t <- sort(table(as.character(x)), decreasing=TRUE)
   nt <- names(t)
@@ -151,6 +166,7 @@
 #' @param digits number of significant digits to show
 #' @param numformat format of the summary for numerical values. Can be one
 #'        of "quantiles", "mean" and "graphics"
+#' @param width width of the summary table in characters
 #' @param ... passed to `summary_colorDF`
 #' @examples
 #' summary(colorDF(iris))
@@ -171,12 +187,12 @@
 #' }
 #' @importFrom stats quantile sd
 #' @export
-summary_colorDF <- function(object, numformat="quantiles", digits=getOption("digits")) {
+summary_colorDF <- function(object, numformat="quantiles", digits=getOption("digits"), width=getOption("width")) {
   numformat <- match.arg(numformat, c("quantiles", "mean", "graphics"))
   x <- object
-  if(!is.list(x)) { stop("x must be a list") }
+  if(!is.list(x)) { stop("x must be a list or a data frame") }
 
-  cnames <- colnames(x)
+  cnames <- names(x)
   classes <- map_chr(x, ~ class(.)[1])
   nas <- map_int(x, ~ sum(is.na(.)))
   if(is.null(cnames)) { cnames <- 1:length(x) }
@@ -186,7 +202,7 @@ summary_colorDF <- function(object, numformat="quantiles", digits=getOption("dig
   ## rough estimate of the available width
   def_style <- .get_style()
   sep_n <- nchar(def_style$sep %OR% " ")
-  width <- getOption("width") - (
+  width <- width - (
     max(c(4, nchar(cnames))) + 5 + 
     max(c(4, nchar(nas))) + 
     max(c(7, nchar(uniq))) + 3 + sep_n * 7)
