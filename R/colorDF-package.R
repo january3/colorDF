@@ -35,7 +35,8 @@ NULL
 #' Global options for colorDF
 #' 
 #' The behavior of colorful data frames can be influenced by a number of
-#' global options set with [options()].
+#' global options set with [options()]. All options and their defaults can be viewed with
+#' `colorDF_options()`.
 #'
 #' The following global options are interpreted by functions in the colorDF
 #' package:
@@ -68,6 +69,35 @@ NULL
 #' @name colorDF-global-options
 NULL
 
+#' @rdname colorDF-global-options
+#' @export
+colorDF_options <- function() {
+
+  df <- read.table(text=
+'Option\tDescription\tDefault
+colorDF_n\tNumber of rows to show\t20
+colorDF_noitalic\tSuppress italics (read on loading)\tFALSE
+colorDF_tibble_style\tShow only rows and numbers wich fit on the screen\tFALSE
+colorDF_sep\tColumn separator\t" "
+colorDF_theme\tcolorDF theme to use\tlight
+width\tWidth of the terminal\tgetOption("width")
+', sep="\t", header=TRUE, quote="", stringsAsFactors=FALSE)
+
+  curr <- sapply(df$Option, function(x) {
+    .cur <- getOption(x)
+    if(is.null(.cur)) .cur <- "NULL"
+    if(.cur == " ") {
+      .cur <- '" "'
+    }
+    .cur})
+
+  df$Current <- curr
+  print_colorDF(df)
+  return(invisible(df))
+}
+
+
+
 ## environment holding some global configuration options
 .colorDF_DataEnv <- new.env(parent=emptyenv())
 
@@ -91,3 +121,7 @@ NULL
     pkgname
     ))
 }
+
+
+
+
