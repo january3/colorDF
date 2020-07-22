@@ -222,7 +222,7 @@ demonstrate available themes; <code><a href='highlight.html'>highlight()</a></co
 how to use colorDF to highlight selected parts of a data frame.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='colorDF.html'>colorDF</a></span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; # Color data frame 11 x 32:
+    <pre class="examples"><div class='input'><span class='fu'><a href='colorDF.html'>colorDF</a></span>(<span class='no'>mtcars</span>)</div><div class='output co'>#&gt; # Color data frame (class colorDF) 11 x 32:
 #&gt; # (Showing rows 1 - 20 out of 32)
 #&gt;                    │mpg  │cyl  │disp │hp   │drat │wt   │qsec │vs   │am   │gear 
 #&gt;                    │&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;
@@ -246,7 +246,7 @@ how to use colorDF to highlight selected parts of a data frame.</p></div>
 #&gt;            Fiat 128│   32│    4│   79│   66│  4.1│  2.2│   19│    1│    1│    4
 #&gt;         Honda Civic│   30│    4│   76│   52│  4.9│  1.6│   19│    1│    1│    4
 #&gt;      Toyota Corolla│   34│    4│   71│   65│  4.2│  1.8│   20│    1│    1│    4
-#&gt; # 1 more columns: carb (&lt;dbl&gt;)</div><div class='input'><span class='fu'>print_colorDF</span>(<span class='no'>mtcars</span>, <span class='kw'>row.names</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; # Data frame 11 x 32:
+#&gt; # 1 more columns: carb (&lt;dbl&gt;)</div><div class='input'><span class='fu'>print_colorDF</span>(<span class='no'>mtcars</span>, <span class='kw'>row.names</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; # Data frame (class data.frame) 11 x 32:
 #&gt; # (Showing rows 1 - 20 out of 32)
 #&gt; │mpg  │cyl  │disp │hp   │drat │wt   │qsec │vs   │am   │gear │carb 
 #&gt; │&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;
@@ -280,7 +280,7 @@ how to use colorDF to highlight selected parts of a data frame.</p></div>
     <span class='co'>## with another style</span>
     <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='kw'>colorDF_theme</span><span class='kw'>=</span><span class='st'>"bw"</span>)
     <span class='no'>starwars</span> <span class='kw'>%&gt;%</span> <span class='fu'>print_colorDF</span>(<span class='kw'>tibble_style</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>" |%%| "</span>)
-}</div><div class='output co'>#&gt; # Tibble 13 x 87:
+}</div><div class='output co'>#&gt; # Tibble (class tbl_df) 13 x 87:
 #&gt; # (Showing rows 1 - 20 out of 87)
 #&gt;   │name                 │height│mass │hair_color   │skin_color      │eye_color
 #&gt;   │&lt;chr&gt;                │&lt;int&gt; │&lt;dbl&gt;│&lt;chr&gt;        │&lt;chr&gt;           │&lt;chr&gt;    
@@ -305,7 +305,7 @@ how to use colorDF to highlight selected parts of a data frame.</p></div>
 #&gt; 19│Yoda                 │    66│   17│white        │green           │brown    
 #&gt; 20│Palpatine            │   170│   75│grey         │pale            │yellow   
 #&gt; # 7 more columns: birth_year (&lt;dbl&gt;), gender (&lt;chr&gt;), homeworld (&lt;chr&gt;), species (&lt;chr&gt;), films (&lt;lst&gt;), vehicles (&lt;lst&gt;), starships (&lt;lst&gt;)
-#&gt; # Tibble 13 x 87:
+#&gt; # Tibble (class tbl_df) 13 x 87:
 #&gt; # (Showing rows 1 - 20 out of 87)
 #&gt;   │name                 │height│mass │hair_color   │skin_color      │eye_color
 #&gt;   │&lt;chr&gt;                │&lt;int&gt; │&lt;dbl&gt;│&lt;chr&gt;        │&lt;chr&gt;           │&lt;chr&gt;    
@@ -330,7 +330,7 @@ how to use colorDF to highlight selected parts of a data frame.</p></div>
 #&gt; 19│Yoda                 │    66│   17│white        │green           │brown    
 #&gt; 20│Palpatine            │   170│   75│grey         │pale            │yellow   
 #&gt; # 7 more columns: birth_year (&lt;dbl&gt;), gender (&lt;chr&gt;), homeworld (&lt;chr&gt;), species (&lt;chr&gt;), films (&lt;lst&gt;), vehicles (&lt;lst&gt;), starships (&lt;lst&gt;)
-#&gt; # Tibble 13 x 87:
+#&gt; # Tibble (class tbl_df) 13 x 87:
 #&gt; # (Showing rows 1 - 20 out of 87)
 #&gt;    |%%| name                  |%%| height |%%| mass  |%%| hair_color   
 #&gt;    |%%| &lt;chr&gt;                 |%%| &lt;int&gt;  |%%| &lt;dbl&gt; |%%| &lt;chr&gt;        

@@ -147,28 +147,28 @@ with <code><a href='colorDF.html'>colorDF()</a></code> by using the <code>theme=
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>colorDF_themes_show</span>()</div><div class='output co'>#&gt; Theme light - Suitable for black on white terminals:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;  │ID   │String   │Factor│Number│Integer│Logical│Pvalue
 #&gt; 1│  ID1│foo      │foo   │  12.1│     12│TRUE   │0.001 
 #&gt; 2│  ID2│baz      │baz   │  -3.1│    -13│FALSE  │0.314 
 #&gt; 3│  ID3│highlight│boo   │   2.7│     42│NA     │NA    
 #&gt; 
 #&gt; Theme minimal - Almost no style:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;   ID    String    Factor Number            Integer Logical Pvalue  
 #&gt; 1 ID1   foo       foo    12.1              12      TRUE    0.001   
 #&gt; 2 ID2   baz       baz    -3.14159265358979 -13     FALSE   0.314159
 #&gt; 3 ID3   highlight boo    2.71828182845905  42      NA      NA      
 #&gt; 
 #&gt; Theme universal - Suitable for all terminals:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;  │ID   │String   │Factor│Number│Integer│Logical│Pvalue
 #&gt; 1│  ID1│foo      │foo   │  12.1│     12│TRUE   │0.001 
 #&gt; 2│  ID2│baz      │baz   │  -3.1│    -13│FALSE  │0.314 
 #&gt; 3│  ID3│highlight│boo   │   2.7│     42│NA     │NA    
 #&gt; 
 #&gt; Theme tibble - Very much like a tibble:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;   ID    String    Factor Number Integer Logical Pvalue
 #&gt;   &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;lgl&gt;   &lt;dbl&gt; 
 #&gt; 1 ID1   foo       foo    12.10   12     TRUE    0.001 
@@ -176,28 +176,28 @@ with <code><a href='colorDF.html'>colorDF()</a></code> by using the <code>theme=
 #&gt; 3 ID3   highlight boo     2.72   42     NA         NA 
 #&gt; 
 #&gt; Theme dark - Suitable for white on black terminals:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;  │ID   │String   │Factor│Number│Integer│Logical│Pvalue
 #&gt; 1│  ID1│foo      │foo   │  12.1│     12│TRUE   │0.001 
 #&gt; 2│  ID2│baz      │baz   │  -3.1│    -13│FALSE  │0.314 
 #&gt; 3│  ID3│highlight│boo   │   2.7│     42│NA     │NA    
 #&gt; 
 #&gt; Theme bw - Black and white only. Suitable for black on white terminals:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;  │ID   │String   │Factor│Number│Integer│Logical│Pvalue
 #&gt; 1│  ID1│foo      │foo   │  12.1│     12│TRUE   │0.001 
 #&gt; 2│  ID2│baz      │baz   │  -3.1│    -13│FALSE  │0.314 
 #&gt; 3│  ID3│highlight│boo   │   2.7│     42│NA     │NA    
 #&gt; 
 #&gt; Theme wb - Black and white only. Suitable for white on black terminals:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;  │ID   │String   │Factor│Number│Integer│Logical│Pvalue
 #&gt; 1│  ID1│foo      │foo   │  12.1│     12│TRUE   │0.001 
 #&gt; 2│  ID2│baz      │baz   │  -3.1│    -13│FALSE  │0.314 
 #&gt; 3│  ID3│highlight│boo   │   2.7│     42│NA     │NA    
 #&gt; 
 #&gt; Theme new - My new theme:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;  │ID   │String   │Factor│Number│Integer│Logical│Pvalue
 #&gt; 1│  ID1│foo      │foo   │  12.1│     12│TRUE   │0.001 
 #&gt; 2│  ID2│baz      │baz   │  -3.1│    -13│FALSE  │0.314 
@@ -205,14 +205,14 @@ with <code><a href='colorDF.html'>colorDF()</a></code> by using the <code>theme=
 #&gt; 
 #&gt; Default theme: dark
 #&gt; Change it with `options(colorDF_theme="&lt;theme name&gt;")`</div><div class='input'><span class='fu'>colorDF_themes_show</span>(<span class='kw'>themes</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"wb"</span>, <span class='st'>"bw"</span>))</div><div class='output co'>#&gt; Theme bw - Black and white only. Suitable for black on white terminals:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;  │ID   │String   │Factor│Number│Integer│Logical│Pvalue
 #&gt; 1│  ID1│foo      │foo   │  12.1│     12│TRUE   │0.001 
 #&gt; 2│  ID2│baz      │baz   │  -3.1│    -13│FALSE  │0.314 
 #&gt; 3│  ID3│highlight│boo   │   2.7│     42│NA     │NA    
 #&gt; 
 #&gt; Theme wb - Black and white only. Suitable for white on black terminals:
-#&gt; # Color data frame 7 x 3:
+#&gt; # Color data frame (class colorDF) 7 x 3:
 #&gt;  │ID   │String   │Factor│Number│Integer│Logical│Pvalue
 #&gt; 1│  ID1│foo      │foo   │  12.1│     12│TRUE   │0.001 
 #&gt; 2│  ID2│baz      │baz   │  -3.1│    -13│FALSE  │0.314 
