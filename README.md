@@ -2,7 +2,7 @@
 
 The package makes it easy to get nice, colored tables in R terminal.
 
-![colorDF demo](docs/demo_colorDF.png)
+![colorDF demo](man/figures/demo_colorDF.png)
 
 ## Installation
 
