@@ -15,7 +15,7 @@
     highlight  = list(bg="#87FFFF"),
     col.types   = NULL,
     autoformat  = TRUE,
-    data.styles = list(
+    type.styles = list(
       integer    = list(fg="cyan", fg_neg="blue", is.numeric=TRUE, align="right"),
       character  = list(decoration="italic", align="left"),
       numeric    = list(fg="green", fg_neg="blue", is.numeric=TRUE, align="right"),
@@ -47,7 +47,7 @@
     highlight  = list(bg="grey50"),
     col.types   = NULL,
     autoformat  = TRUE,
-    data.styles = list(
+    type.styles = list(
       integer    = list(fg="#009999", fg_neg="#000099", is.numeric=TRUE, align="right"),
       character  = list(decoration="italic", align="left"),
       numeric    = list(fg="green", fg_neg="blue", is.numeric=TRUE, align="right"),
@@ -68,7 +68,7 @@
     digits       = 3,
     fg_na        = "red",
     row.names    = list(fg="grey50"),
-    data.styles  = list(
+    type.styles  = list(
              integer = list(fg_neg="red", is.numeric=TRUE),
              numeric = list(fg_neg="red", is.numeric=TRUE)
     )
@@ -89,7 +89,7 @@
     interleave = list(bg="grey20", grey=TRUE),
     col.types   = NULL,
     autoformat  = TRUE,
-    data.styles = list(
+    type.styles = list(
       integer    = list(fg="#00FFFF", fg_neg="#6666FF", is.numeric=TRUE, align="right"),
       character  = list(decoration="italic", align="left"),
       numeric    = list(fg="#00FF00", fg_neg="#6666FF", is.numeric=TRUE, align="right"),
@@ -114,7 +114,7 @@
     interleave = list(bg="grey94", grey=TRUE),
     col.types   = NULL,
     autoformat  = TRUE,
-    data.styles = list(
+    type.styles = list(
       integer    = list(is.numeric=TRUE, align="right"),
       character  = list(decoration="italic", align="left"),
       numeric    = list(is.numeric=TRUE, align="right"),
@@ -138,7 +138,7 @@
     interleave = list(bg="grey10", grey=TRUE),
     col.types   = NULL,
     autoformat  = TRUE,
-    data.styles = list(
+    type.styles = list(
       integer    = list(is.numeric=TRUE, align="right"),
       character  = list(decoration="italic", align="left"),
       numeric    = list(is.numeric=TRUE, align="right"),
@@ -236,7 +236,7 @@ colorDF_themes_show <- function(themes=NULL, force_bg=FALSE) {
 #' foo <- colorDF(mtcars)
 #' df_style(foo) <- get_colorDF_theme("wb")
 #' ## Slightly modify the style
-#' df_style(foo)$data.styles$pval$fg_sign <- "red"
+#' df_style(foo)$type.styles$pval$fg_sign <- "red"
 #' @export
 get_colorDF_theme <- function(theme) {
   ret <- .theme_env[[".themes"]][[theme]] 
@@ -253,7 +253,7 @@ get_colorDF_theme <- function(theme) {
 #' @examples
 #' newtheme <- get_colorDF_theme("bw")
 #' ## Like "bw" theme, but significant p-values are red
-#' newtheme$data.styles$pval$fg_sign <- "#FF0000"
+#' newtheme$type.styles$pval$fg_sign <- "#FF0000"
 #' add_colorDF_theme(newtheme, "new", "My new theme")
 #' @return invisibly the new theme.
 #' @export

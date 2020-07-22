@@ -95,7 +95,7 @@
 .autostyle <- function(c.names, ctypes, style) {
   if(is.null(c.names)) return(ctypes)
 
-  st.n <- names(style[["data.styles"]]) %OR% list()
+  st.n <- names(style[["type.styles"]]) %OR% list()
 
   if("pval" %in% st.n) {
     sel <- grepl("^(p.value|pvalue|pval|qval|qvalue|p|q)$", c.names, ignore.case=TRUE)
@@ -128,7 +128,7 @@
     columns.known <- names(col_types_predef)
     columns.known.types <- map_chr(col_types_predef, ~ .x[[1]])
 
-    sel <- columns.known %in% c.names & columns.known.types %in% names(style[["data.styles"]])
+    sel <- columns.known %in% c.names & columns.known.types %in% names(style[["type.styles"]])
     for(i in which(sel)) {
       ctypes[ c.names == columns.known[i] ] <- col_types_predef[[i]]
     }
@@ -140,11 +140,11 @@
     ret <- x[[.]]
 
     # style defined for this column type
-    if(ct %in% names(style[["data.styles"]])) {
-      ret <- style[["data.styles"]][[ct]]
+    if(ct %in% names(style[["type.styles"]])) {
+      ret <- style[["type.styles"]][[ct]]
       # default style defined in `style`
-    } else if(!is.null(style[["data.styles"]][["default"]])) {
-      ret <- style[["data.styles"]][["default"]]
+    } else if(!is.null(style[["type.styles"]][["default"]])) {
+      ret <- style[["type.styles"]][["default"]]
     } else {
       # empty style
       ret <- list()
@@ -188,7 +188,7 @@
 
 .hidden_cols <- function(x) {
   col_types_predef <- attr(x, ".coltp")
-  if(is.null(col_types_predef)) {
+  if(is.null(col_types_predef) || length(col_types_predef) == 0L) {
     return(c())
   }
 

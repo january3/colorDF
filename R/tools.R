@@ -97,7 +97,7 @@ df_search <- function(x, pattern=NULL, cols=NULL) {
     col_type(x, i) <- cty
   }
 
-  df_style(x)$data.styles$match$pattern <- pattern
+  df_style(x)$type.styles$match$pattern <- pattern
 
   return(x)
 }

@@ -39,8 +39,8 @@ p-value and color significant cells.
 \item col.types: a list mapping the column names to column types. For example,
 if it is \code{list(result="pval")}, then the column with name "result" will
 be considered to be a p-value and styled accordingly.
-\item type.styles: a list mapping column types to formatting styles. See "Column types"
-below.
+\item type.styles: a list mapping column types to formatting styles. See "Formatting styles"
+below and help page for \code{\link[=col_type]{col_type()}}.
 \item fixed.width: if not NULL, all columns have the same width
 \item sep: string separating the columns
 \item digits: how many digits to use
@@ -70,25 +70,6 @@ words: inverse, bold, italic
 }
 }
 
-\section{Column types}{
-
-
-Rather than directly assigning a style to a column (which is possible
-using the \code{col.styles} element) it is preferable to change a style
-associated with a column type. Several such types are defined in the
-default styles:
-\itemize{
-\item character
-\item numeric
-\item integer
-\item factor
-\item identifier
-\item pval
-\item match
-\item default
-}
-}
-
 \examples{
 df <- as.colorDF(mtcars)
 
@@ -97,7 +78,7 @@ df_style(df, "row.names") <- list(fg="red", bg="#FFFF00")
 
 ## you can use `$` to access the elements
 ## here, show significant p-values in green
-df_style(df)$data.styles$pval$fg_sign <- "green"
+df_style(df)$type.styles$pval$fg_sign <- "green"
 
 ## example of assigning multiple values in one assignment:
 df_style(df) <- list(interleave=list(fg="#FFFFFF", bg="blue"),
@@ -107,5 +88,6 @@ df_style(df) <- list(interleave=list(fg="#FFFFFF", bg="blue"),
 
 }
 \seealso{
-\code{\link[=print.colorDF]{print.colorDF()}} on printing options
+\code{\link[=print.colorDF]{print.colorDF()}} on printing options; \code{\link[=col_type]{col_type()}} for column
+types.
 }

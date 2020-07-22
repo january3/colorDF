@@ -198,82 +198,82 @@
 #&gt; $autoformat
 #&gt; [1] TRUE
 #&gt; 
-#&gt; $data.styles
-#&gt; $data.styles$integer
-#&gt; $data.styles$integer$is.numeric
+#&gt; $type.styles
+#&gt; $type.styles$integer
+#&gt; $type.styles$integer$is.numeric
 #&gt; [1] TRUE
 #&gt; 
-#&gt; $data.styles$integer$align
+#&gt; $type.styles$integer$align
 #&gt; [1] "right"
 #&gt; 
 #&gt; 
-#&gt; $data.styles$character
-#&gt; $data.styles$character$decoration
+#&gt; $type.styles$character
+#&gt; $type.styles$character$decoration
 #&gt; [1] "italic"
 #&gt; 
-#&gt; $data.styles$character$align
+#&gt; $type.styles$character$align
 #&gt; [1] "left"
 #&gt; 
 #&gt; 
-#&gt; $data.styles$numeric
-#&gt; $data.styles$numeric$is.numeric
+#&gt; $type.styles$numeric
+#&gt; $type.styles$numeric$is.numeric
 #&gt; [1] TRUE
 #&gt; 
-#&gt; $data.styles$numeric$align
+#&gt; $type.styles$numeric$align
 #&gt; [1] "right"
 #&gt; 
 #&gt; 
-#&gt; $data.styles$logical
-#&gt; $data.styles$logical$fg_true
+#&gt; $type.styles$logical
+#&gt; $type.styles$logical$fg_true
 #&gt; [1] "#000000"
 #&gt; 
-#&gt; $data.styles$logical$fg_false
+#&gt; $type.styles$logical$fg_false
 #&gt; [1] "#333333"
 #&gt; 
-#&gt; $data.styles$logical$align
+#&gt; $type.styles$logical$align
 #&gt; [1] "left"
 #&gt; 
 #&gt; 
-#&gt; $data.styles$factor
-#&gt; $data.styles$factor$is.numeric
+#&gt; $type.styles$factor
+#&gt; $type.styles$factor$is.numeric
 #&gt; [1] FALSE
 #&gt; 
-#&gt; $data.styles$factor$align
+#&gt; $type.styles$factor$align
 #&gt; [1] "left"
 #&gt; 
 #&gt; 
-#&gt; $data.styles$identifier
-#&gt; $data.styles$identifier$decoration
+#&gt; $type.styles$identifier
+#&gt; $type.styles$identifier$decoration
 #&gt; [1] "bold"
 #&gt; 
-#&gt; $data.styles$identifier$align
+#&gt; $type.styles$identifier$align
 #&gt; [1] "right"
 #&gt; 
 #&gt; 
-#&gt; $data.styles$match
-#&gt; $data.styles$match$fg_match
+#&gt; $type.styles$match
+#&gt; $type.styles$match$fg_match
 #&gt; [1] "#000000"
 #&gt; 
-#&gt; $data.styles$match$fg
+#&gt; $type.styles$match$fg
 #&gt; [1] "grey"
 #&gt; 
 #&gt; 
-#&gt; $data.styles$pval
-#&gt; $data.styles$pval$fg_sign
+#&gt; $type.styles$pval
+#&gt; $type.styles$pval$fg_sign
 #&gt; [1] "#000000"
 #&gt; 
-#&gt; $data.styles$pval$fg
+#&gt; $type.styles$pval$fg
 #&gt; [1] "grey"
 #&gt; 
-#&gt; $data.styles$pval$sign.thr
+#&gt; $type.styles$pval$sign.thr
 #&gt; [1] 0.05
 #&gt; 
-#&gt; $data.styles$pval$is.pval
+#&gt; $type.styles$pval$is.pval
 #&gt; [1] TRUE
 #&gt; 
 #&gt; 
-#&gt; $data.styles$default
-#&gt; $data.styles$default$align
+#&gt; $type.styles$default
+#&gt; $type.styles$default$align
 #&gt; [1] "left"
 #&gt; 
 #&gt; 
@@ -282,7 +282,7 @@
 <span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='colorDF.html'>colorDF</a></span>(<span class='no'>mtcars</span>)
 <span class='fu'><a href='df_style.html'>df_style</a></span>(<span class='no'>foo</span>) <span class='kw'>&lt;-</span> <span class='fu'>get_colorDF_theme</span>(<span class='st'>"wb"</span>)
 <span class='co'>## Slightly modify the style</span>
-<span class='fu'><a href='df_style.html'>df_style</a></span>(<span class='no'>foo</span>)$<span class='no'>data.styles</span>$<span class='no'>pval</span>$<span class='no'>fg_sign</span> <span class='kw'>&lt;-</span> <span class='st'>"red"</span></div></pre>
+<span class='fu'><a href='df_style.html'>df_style</a></span>(<span class='no'>foo</span>)$<span class='no'>type.styles</span>$<span class='no'>pval</span>$<span class='no'>fg_sign</span> <span class='kw'>&lt;-</span> <span class='st'>"red"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

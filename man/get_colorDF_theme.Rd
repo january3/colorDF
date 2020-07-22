@@ -22,5 +22,5 @@ get_colorDF_theme("bw")
 foo <- colorDF(mtcars)
 df_style(foo) <- get_colorDF_theme("wb")
 ## Slightly modify the style
-df_style(foo)$data.styles$pval$fg_sign <- "red"
+df_style(foo)$type.styles$pval$fg_sign <- "red"
 }

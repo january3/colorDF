@@ -22,6 +22,6 @@ Add a new theme
 \examples{
 newtheme <- get_colorDF_theme("bw")
 ## Like "bw" theme, but significant p-values are red
-newtheme$data.styles$pval$fg_sign <- "#FF0000"
+newtheme$type.styles$pval$fg_sign <- "#FF0000"
 add_colorDF_theme(newtheme, "new", "My new theme")
 }

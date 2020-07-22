@@ -164,8 +164,8 @@ p-value and color significant cells.</p></li>
 <li><p>col.types: a list mapping the column names to column types. For example,
 if it is <code><a href='https://rdrr.io/r/base/list.html'>list(result="pval")</a></code>, then the column with name "result" will
 be considered to be a p-value and styled accordingly.</p></li>
-<li><p>type.styles: a list mapping column types to formatting styles. See "Column types"
-below.</p></li>
+<li><p>type.styles: a list mapping column types to formatting styles. See "Formatting styles"
+below and help page for <code><a href='col_type.html'>col_type()</a></code>.</p></li>
 <li><p>fixed.width: if not NULL, all columns have the same width</p></li>
 <li><p>sep: string separating the columns</p></li>
 <li><p>digits: how many digits to use</p></li>
@@ -195,28 +195,10 @@ values</p></li>
 words: inverse, bold, italic</p></li>
 </ul>
 
-    <h2 class="hasAnchor" id="column-types"><a class="anchor" href="#column-types"></a>Column types</h2>
-
-    
-
-
-<p>Rather than directly assigning a style to a column (which is possible
-using the <code>col.styles</code> element) it is preferable to change a style
-associated with a column type. Several such types are defined in the
-default styles:</p><ul>
-<li><p>character</p></li>
-<li><p>numeric</p></li>
-<li><p>integer</p></li>
-<li><p>factor</p></li>
-<li><p>identifier</p></li>
-<li><p>pval</p></li>
-<li><p>match</p></li>
-<li><p>default</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='print_colorDF.html'>print.colorDF()</a></code> on printing options</p></div>
+    <div class='dont-index'><p><code><a href='print_colorDF.html'>print.colorDF()</a></code> on printing options; <code><a href='col_type.html'>col_type()</a></code> for column
+types.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='colorDF.html'>as.colorDF</a></span>(<span class='no'>mtcars</span>)
@@ -226,7 +208,7 @@ default styles:</p><ul>
 
 <span class='co'>## you can use `$` to access the elements</span>
 <span class='co'>## here, show significant p-values in green</span>
-<span class='fu'>df_style</span>(<span class='no'>df</span>)$<span class='no'>data.styles</span>$<span class='no'>pval</span>$<span class='no'>fg_sign</span> <span class='kw'>&lt;-</span> <span class='st'>"green"</span>
+<span class='fu'>df_style</span>(<span class='no'>df</span>)$<span class='no'>type.styles</span>$<span class='no'>pval</span>$<span class='no'>fg_sign</span> <span class='kw'>&lt;-</span> <span class='st'>"green"</span>
 
 <span class='co'>## example of assigning multiple values in one assignment:</span>
 <span class='fu'>df_style</span>(<span class='no'>df</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>interleave</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>fg</span><span class='kw'>=</span><span class='st'>"#FFFFFF"</span>, <span class='kw'>bg</span><span class='kw'>=</span><span class='st'>"blue"</span>),
