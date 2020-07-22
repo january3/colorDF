@@ -4,17 +4,9 @@
 \alias{format_col}
 \title{Format a vector using styles}
 \usage{
-format_col(
-  x,
-  col_name = NULL,
-  style = NULL,
-  df_style = NULL,
-  format = TRUE,
-  col_width = NULL,
-  prefix = " ",
-  min.width = 5L,
-  max.width = NULL
-)
+format_col(x, col_name = NULL, style = NULL, df_style = NULL,
+  format = TRUE, col_width = NULL, prefix = " ", min.width = 5L,
+  max.width = NULL)
 }
 \arguments{
 \item{x}{a vector}

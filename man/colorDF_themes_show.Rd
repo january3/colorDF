@@ -25,7 +25,7 @@ option "colorDF_theme" set using \code{\link[=options]{options()}} (at startup, 
 is "light").
 
 You can also specify the theme to use when making a data frame colorful
-with \code{\link[=colorDF]{colorDF()}} by using the \verb{theme=} parameter.
+with \code{\link[=colorDF]{colorDF()}} by using the \code{theme=} parameter.
 }
 \examples{
 colorDF_themes_show()

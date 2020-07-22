@@ -5,12 +5,8 @@
 \alias{summary.colorDF}
 \title{Meaningful summary of lists and data frames}
 \usage{
-summary_colorDF(
-  object,
-  numformat = "quantiles",
-  digits = getOption("digits"),
-  width = getOption("width")
-)
+summary_colorDF(object, numformat = "quantiles",
+  digits = getOption("digits"), width = getOption("width"))
 
 \method{summary}{colorDF}(object, ...)
 }

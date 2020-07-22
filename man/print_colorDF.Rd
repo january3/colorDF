@@ -7,18 +7,10 @@
 \usage{
 \method{print}{colorDF}(x, ...)
 
-print_colorDF(
-  x,
-  n = getOption("colorDF_n"),
-  width = getOption("width"),
-  row.names = TRUE,
-  tibble_style = getOption("colorDF_tibble_style"),
-  highlight = NULL,
-  sep = getOption("colorDF_sep"),
-  bg = NULL,
-  fg = NULL,
-  ...
-)
+print_colorDF(x, n = getOption("colorDF_n"),
+  width = getOption("width"), row.names = TRUE,
+  tibble_style = getOption("colorDF_tibble_style"), highlight = NULL,
+  sep = getOption("colorDF_sep"), bg = NULL, fg = NULL, ...)
 }
 \arguments{
 \item{x}{a colorful data frame (object with class colorDF)}
@@ -72,11 +64,11 @@ It is possible to assign \code{print_colorDF} to the default methods, thus
 changing the way how tibbles, data frames or other data frame like objects
 are displayed. This should be generally safe, but use it on your own peril
 and preferably only in interactive sessions. I use the following code in my
-\link[base:Startup]{.Rprofile} file:\preformatted{if(interactive()) \{
+\link[base:Startup]{.Rprofile} file:\preformatted{if(interactive()) {
   print.data.frame <- colorDF::print_colorDF
   print.tbl        <- colorDF::print_colorDF
   print.data.table <- colorDF::print_colorDF
-\}
+}
 }
 }
 
