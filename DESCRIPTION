@@ -13,6 +13,7 @@ Description: Colorful Data Frames in the terminal. The new class does
              colors the terminal output of data frames. Some column types
              (such as p-values and identifiers) are automatically
              recognized.
+URL: https://january3.github.io/colorDF/, https://github.com/january3/colorDF/
 Depends: R (>= 2.10)
 License: GPL-3
 Encoding: UTF-8
