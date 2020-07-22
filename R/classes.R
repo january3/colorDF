@@ -58,3 +58,18 @@ as.colorDF <- function(x, ...) {
 
 
 
+## we need to wrap around the subset because 
+## otherwise the default functions loose the attributes .coltp and .style
+`[.colorDF` <- function(x, ...) {
+
+  xcl <- class(x)
+  class(x) <- setdiff(xcl, "colorDF")
+  coltp <- attr(x, ".coltp")
+  style <- attr(x, ".style")
+  ret <- x[ ... ]
+  attr(ret, ".coltp") <- coltp
+  attr(ret, ".style") <- style
+  class(ret) <- xcl
+  ret
+
+}

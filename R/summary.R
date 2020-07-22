@@ -163,7 +163,7 @@
 #' @return A colorful data frame of class colorDF containing useful
 #'         information on a dataframe-like object.
 #' @param object a data frame (possibly a color data frame)
-#' @param digits number of significant digits to show
+#' @param digits number of significant digits to show (default: 3)
 #' @param numformat format of the summary for numerical values. Can be one
 #'        of "quantiles", "mean" and "graphics"
 #' @param width width of the summary table in characters
@@ -187,7 +187,7 @@
 #' }
 #' @importFrom stats quantile sd
 #' @export
-summary_colorDF <- function(object, numformat="quantiles", digits=getOption("digits"), width=getOption("width")) {
+summary_colorDF <- function(object, numformat="quantiles", digits=3, width=getOption("width")) {
   numformat <- match.arg(numformat, c("quantiles", "mean", "graphics"))
   x <- object
   if(!is.list(x)) { stop("x must be a list or a data frame") }

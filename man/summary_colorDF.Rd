@@ -8,7 +8,7 @@
 summary_colorDF(
   object,
   numformat = "quantiles",
-  digits = getOption("digits"),
+  digits = 3,
   width = getOption("width")
 )
 
@@ -20,7 +20,7 @@ summary_colorDF(
 \item{numformat}{format of the summary for numerical values. Can be one
 of "quantiles", "mean" and "graphics"}
 
-\item{digits}{number of significant digits to show}
+\item{digits}{number of significant digits to show (default: 3)}
 
 \item{width}{width of the summary table in characters}
 

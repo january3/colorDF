@@ -302,13 +302,15 @@ print_colorDF <- function(x,
   comment_style <- list(fg="silver", decoration="italic")
   #if(!is.null(bg)) { comment_style$bg <- bg }
 
-  name <- "Data frame"
+  name <- "Data frame (class data.frame)"
   if(inherits(x, "colorDF")) {
-    name <- "Color data frame"
+    name <- "Color data frame (class colorDF)"
+  } else if(inherits(x, "tmodReport")) {
+    name <- "tmod report (class tmodReport)"
   } else if(inherits(x, "tbl_df")) {
-    name <- "Tibble"
+    name <- "Tibble (class tbl_df)"
   } else if(inherits(x, "data.table")) {
-    name <- "Data table"
+    name <- "Data table (class data.table)"
   }
 
   ret <- sprintf(.apply_style("# %s %d x %d:", comment_style), name, nc, nr)

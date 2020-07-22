@@ -19,7 +19,7 @@ highlight <- function(x, sel) {
 #' Strip the colorDF class and style
 #' @param x colorful data frame
 #' @return the original data frame like object
-colorDF_remove <- function(x) {
+uncolor <- function(x) {
 
   attr(x, ".style") <- NULL
   attr(x, ".coltp") <- NULL

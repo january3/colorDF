@@ -202,7 +202,7 @@ col_type <- function(x, cols=NULL) {
 
   if(!is.null(cols)) {
     if(is.numeric(cols)) cols <- paste0("X.", cols)
-    return(col_type$col.types[[cols]])
+    return(col_type[[cols]])
   } else {
     return(col_type)
   }
