@@ -218,7 +218,7 @@ col_type <- function(x, cols=NULL) {
 #' intact. 
 #' @return colorless data frame
 #' @param x a colorful dataframe 
-#' @seealso To completely remove the colorDF class and attributes, use [colorDF_remove()]
+#' @seealso To completely remove the colorDF class and attributes, use [uncolor()]
 #' @export
 remove_df_style <- function(x) {
   attr(x, ".style") <- NULL

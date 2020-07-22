@@ -296,17 +296,16 @@ print_colorDF <- function(x,
   style$sep <- sep %OR% style$sep %OR% " "
   sep.length <- nchar(style$sep)
 
-
   tibble_style <- .is_tibble_style(tibble_style, style)
 
   comment_style <- list(fg="silver", decoration="italic")
-  #if(!is.null(bg)) { comment_style$bg <- bg }
+  if(!is.null(bg)) { comment_style$bg <- bg }
 
   name <- "Data frame (class data.frame)"
-  if(inherits(x, "colorDF")) {
-    name <- "Color data frame (class colorDF)"
-  } else if(inherits(x, "tmodReport")) {
+  if(inherits(x, "tmodReport")) {
     name <- "tmod report (class tmodReport)"
+  } else if(inherits(x, "colorDF")) {
+    name <- "Color data frame (class colorDF)"
   } else if(inherits(x, "tbl_df")) {
     name <- "Tibble (class tbl_df)"
   } else if(inherits(x, "data.table")) {

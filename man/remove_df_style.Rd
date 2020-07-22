@@ -20,5 +20,5 @@ Strips the color data frame style, but leaves the .coltp and class
 intact.
 }
 \seealso{
-To completely remove the colorDF class and attributes, use \code{\link[=colorDF_remove]{colorDF_remove()}}
+To completely remove the colorDF class and attributes, use \code{\link[=uncolor]{uncolor()}}
 }
