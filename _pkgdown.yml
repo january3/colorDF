@@ -1,0 +1,37 @@
+destination: docs
+template:
+  params:
+    bootswatch: sandstone
+home:
+  links:
+  - text: CRAN page
+    href: https://CRAN.R-project.org/package=colorDF
+reference:
+  - title: "The colorDF class"      
+  - contents:
+    - colorDF-package
+    - colorDF
+    - print_colorDF
+    - is.colorDF
+    - example_colorDF
+    - uncolor
+  - title: "Global options"
+  - contents:
+    - colorDF_options
+  - title: "colorDF styles, themes and column types"
+  - contents: 
+    - colorDF_themes
+    - colorDF_themes_show
+    - get_colorDF_theme
+    - add_colorDF_theme
+    - df_style
+    - remove_df_style
+    - col_type
+  - title: "Extras (utilities)"
+  - contents:
+    - summary_colorDF
+    - highlight
+    - df_search
+    - term_boxplot
+    - format_col
+

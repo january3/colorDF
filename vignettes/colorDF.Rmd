@@ -70,7 +70,12 @@ dynamic, colorful output when viewing data frames. There are two things
 about colorDF which are important:
 
  1. colorDF *never* modifies the behavior of the data frame like object or
-    its contents (i.e. it does not redefine methods like `[<-`, removes row names etc.). 
+    its contents (i.e. it does not redefine methods like `[<-`, removes row names 
+    etc.^[Strictly speaking, that is not true, as there is a
+    `[.colorDF` method which serves only as a wrapper around the respective
+    `[` of the underlying data frame, tibble or data table. The only reason
+    is exist is that otherwise the style and column type attributes will be
+    lost.]). 
     The only two things that change are (i) the default print method
     (visualization), and (ii) the ".style" and ".coltp" attributes of the
     object, and that only if you really change the class of the object,
@@ -238,6 +243,16 @@ foo <- starwars %>% select(name, species, homeworld) %>%
 (Unfortunately, the HTML representation of the ANSI terminal doesn't show
 that one correctly).
 
+
+## Data frame search
+
+The `df_search()` function looks through a data frame for occurence of a
+pattern in all columns (or a subset, if the parameter `cols` is used) and
+where the pattern matches, it colors the contents of the cell in red:
+
+```{r, eval=TRUE}
+starwars %>% df_search("blue")
+```
 
 # Setting up colorDF as the default data frame print method
 
