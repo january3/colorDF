@@ -287,6 +287,25 @@ print_colorDF <- function(x,
   fg=NULL,
   ...) {
 
+  name <- "Data frame (class data.frame)"
+  if(inherits(x, "tmodReport")) {
+    name <- "tmod report (class tmodReport)"
+  } else if(inherits(x, "colorDF")) {
+    name <- "Color data frame (class colorDF)"
+  } else if(inherits(x, "tbl_df")) {
+    name <- "Tibble (class tbl_df)"
+  } else if(inherits(x, "data.table")) {
+    name <- "Data table (class data.table)"
+  } else {
+    cl <- class(x)[1]
+    err <- try(as.data.frame(x))
+    if(inherits(err, "try-error")) {
+      stop("This does not look like a data frame like object")
+    }
+    x <- err
+    name <- sprintf("Data frame like object (class %s)", cl)
+  }
+
   if(is.null(n)) n <- 20
 
   nc <- ncol(x) ; nr <- nrow(x)
@@ -301,16 +320,6 @@ print_colorDF <- function(x,
   comment_style <- list(fg="silver", decoration="italic")
   if(!is.null(bg)) { comment_style$bg <- bg }
 
-  name <- "Data frame (class data.frame)"
-  if(inherits(x, "tmodReport")) {
-    name <- "tmod report (class tmodReport)"
-  } else if(inherits(x, "colorDF")) {
-    name <- "Color data frame (class colorDF)"
-  } else if(inherits(x, "tbl_df")) {
-    name <- "Tibble (class tbl_df)"
-  } else if(inherits(x, "data.table")) {
-    name <- "Data table (class data.table)"
-  }
 
   ret <- sprintf(.apply_style("# %s %d x %d:", comment_style), name, nc, nr)
   if(n < nr && nc > 0) { 
