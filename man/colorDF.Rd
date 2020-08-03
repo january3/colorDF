@@ -10,7 +10,8 @@ colorDF(x, theme = NULL)
 as.colorDF(x, ...)
 }
 \arguments{
-\item{x}{a data frame or similar object (e.g. tibble)}
+\item{x}{a data frame or similar object, e.g. tibble, data.table or any
+object for which as.data.frame call returns a data frame}
 
 \item{theme}{Which theme to use}
 

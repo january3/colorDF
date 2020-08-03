@@ -243,8 +243,10 @@ print.colorDF <- function(x, ...) {
 #' ```
 #'
 #' @param n Number of rows to show (default=20, use Inf to show all; this
-#'          value can be set with options("colorDF_n"))
-#' @param x a colorful data frame (object with class colorDF)
+#'        value can be set with options("colorDF_n"))
+#' @param x a colorful data frame (object with class colorDF), a
+#'        data.frame, a tibble, a data.table or any other object which can be coerced
+#'        to data frame with as.data.frame function.
 #' @param width number of characters that the data frame should span on output
 #' @param row.names if TRUE (default), row names will be shown on output
 #' @param highlight a logical vector indicating which rows to highlight

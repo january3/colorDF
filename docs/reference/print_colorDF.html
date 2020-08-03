@@ -144,7 +144,9 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a colorful data frame (object with class colorDF)</p></td>
+      <td><p>a colorful data frame (object with class colorDF), a
+data.frame, a tibble, a data.table or any other object which can be coerced
+to data frame with as.data.frame function.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -251,7 +253,7 @@ how to use colorDF to highlight selected parts of a data frame.</p></div>
 #&gt;            Fiat 128│   32│    4│   79│   66│  4.1│  2.2│   19│    1│    1│    4
 #&gt;         Honda Civic│   30│    4│   76│   52│  4.9│  1.6│   19│    1│    1│    4
 #&gt;      Toyota Corolla│   34│    4│   71│   65│  4.2│  1.8│   20│    1│    1│    4
-#&gt; # 1 more columns: carb (&lt;dbl&gt;)</div><div class='input'><span class='fu'>print_colorDF</span>(<span class='no'>mtcars</span>, <span class='kw'>row.names</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; # Data frame (class data.frame) 11 x 32:
+#&gt; # 1 more columns: carb (&lt;dbl&gt;)</div><div class='input'><span class='fu'>print_colorDF</span>(<span class='no'>mtcars</span>, <span class='kw'>row.names</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; # Data frame like object (class data.frame) 11 x 32:
 #&gt; # (Showing rows 1 - 20 out of 32)
 #&gt; │mpg  │cyl  │disp │hp   │drat │wt   │qsec │vs   │am   │gear │carb 
 #&gt; │&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;│&lt;dbl&gt;

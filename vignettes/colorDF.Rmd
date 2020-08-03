@@ -262,13 +262,13 @@ function:
 
 ```{r eval=FALSE}
 ## for regular data frames
-print.data.frame <- colorDF:::print.colorDF
+print.data.frame <- colorDF:::print_colorDF
 
 ## for tidyverse tibbles
-print.tbl        <- colorDF:::print.colorDF
+print.tbl        <- colorDF:::print_colorDF
 
 ## for data.tables
-print.data.table <- colorDF:::print.colorDF
+print.data.table <- colorDF:::print_colorDF
 ```
 
 This will not replace or modify the original functions from data.table or
@@ -282,6 +282,34 @@ these new functions:
 ```{r eval=FALSE}
 rm(print.data.frame, print.tbl, print.data.table)
 ```
+
+This is a bit more complicated in case of S4 objects. One such object type
+is a DataFrame defined in the S4Vectors package. It is commonly used in
+many Bioconductor packages such as DESeq2. Unfortunately, the `show` method
+defined for DataFrames is not convenient, for example it always displays a
+ridiculous number of significant digits, cluttering the output.
+`print_colorDF` can print these classes, as it can work on anything that
+can be cast into a data frame using an `as.data.frame` method.
+
+To take over the output of DataFrames and all other objects inheriting from
+it (such as DESeqResults), we need to use the S4 convention of defining the
+methods:
+
+
+```{r eval=FALSE}
+setMethod("show", "DataFrame", function(object) colorDF::print_colorDF(object))
+```
+
+Since methods can be only defined for existing classes, if you want to put
+it in your `.Rprofile`, you need to first load (but not necessarily attach)
+the S4Vectors package:
+
+```{r eval=FALSE}
+loadNamespace("S4Vectors")
+setMethod("show", "DataFrame", function(object) colorDF::print_colorDF(object))
+```
+
+
 
 # Global options
 

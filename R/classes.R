@@ -21,7 +21,8 @@
 #'
 #' [as.colorDF()] calls [colorDF()]; this function is only here for
 #' completeness.
-#' @param x a data frame or similar object (e.g. tibble)
+#' @param x a data frame or similar object, e.g. tibble, data.table or any
+#'        object for which as.data.frame call returns a data frame
 #' @param theme Which theme to use
 #' @param ... further arguments are passed to [colorDF()].
 #' @return a colorful data frame – identical object but with the `.style`

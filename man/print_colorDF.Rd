@@ -21,7 +21,9 @@ print_colorDF(
 )
 }
 \arguments{
-\item{x}{a colorful data frame (object with class colorDF)}
+\item{x}{a colorful data frame (object with class colorDF), a
+data.frame, a tibble, a data.table or any other object which can be coerced
+to data frame with as.data.frame function.}
 
 \item{...}{further arguments are ignored}
 
@@ -54,7 +56,7 @@ object. Using \code{\link[=colorDF]{colorDF()}} to change the class of the objec
 necessary if modifications to the style are required, such as specifying
 column type. However, \code{print_colorDF} applied to virtually any data frame,
 tibble or data table will work. In such a case, the theme used to display the data frame
-will either be taken from \code{\link[base:getOption]{getOption("colorDF_theme")}} or a default theme will be used.
+will either be taken from \code{\link[base:options]{getOption("colorDF_theme")}} or a default theme will be used.
 }
 \section{Column types}{
 
