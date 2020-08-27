@@ -336,8 +336,7 @@ print_colorDF <- function(x,
     gn   <- names(df_groups)[ -ncol(df_groups) ]
     gnum <- nrow(df_groups)
     gn   <- paste(gn, collapse=", ")
-    ret <- ret %+% sprintf(.apply_style("# Groups: %s [%d]", comment_style), gn, gnum)
-    ret <- ret %+% '\n'
+    ret <- ret %+% '\n' %+% sprintf(.apply_style("# Groups: %s [%d]", comment_style), gn, gnum)
   }
 
   x <- head(x, n)
