@@ -91,7 +91,7 @@
   return(x)
 }
 
-## Guess what the type of the column should be.
+## Guess what the type of the column should be based on column IDs
 .autostyle <- function(c.names, ctypes, style) {
   if(is.null(c.names)) return(ctypes)
 
@@ -329,7 +329,9 @@ print_colorDF <- function(x,
   }
 
   hidden <- .hidden_cols(x)
-  x <- x[ , ! names(x) %in% hidden, drop=FALSE ]
+  if(!is.null(names(x))) {
+    x <- x[ , ! names(x) %in% hidden, drop=FALSE ]
+  }
 
   ## grouped_df is a class added when tibble groups the data
   if("grouped_df" %in% class(x) && !is.null(df_groups <- attr(x, "groups"))) {
@@ -348,7 +350,7 @@ print_colorDF <- function(x,
     ret <- ret %+% "\n" %+% .apply_style("# No columns in the data frame", comment_style)
   }
 
-  if(length(hidden) > 0) {
+  if(!is.null(names(x)) && length(hidden) > 0) {
     msg <- sprintf("# Hidden columns (%d): %s", length(hidden), paste(hidden, collapse=", "))
     msg <- .apply_style(msg, comment_style)
     ret <- ret %+% '\n' %+% msg
@@ -371,7 +373,7 @@ print_colorDF <- function(x,
 ## actual printing of the data frame
 .print_df <- function(x, style, highlight=NULL, n=20, row.names=TRUE, width=70, tibble_style=FALSE, comment_style=NULL) {
 
-  c.names <- colnames(x)
+  c.names <- colnames(x) %OR% rep("", length(x))
   r.names <- .get_rownames(x, row.names)
   if(n > 0) {
     row.names.w <- max(nchar(r.names))

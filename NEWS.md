@@ -1,4 +1,4 @@
-# colorDF (development version)
+# colorDF 0.1.5
 
  * This is the development version.
 
