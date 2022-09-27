@@ -6,6 +6,7 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/january3/colorDF/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/january3/colorDF/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/january3/colorDF/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/january3/colorDF/actions/workflows/test-coverage.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/colorDF)](https://CRAN.R-project.org/package=colorDF)
 <!-- badges: end -->
 
 
