@@ -1,11 +1,10 @@
+url: https://january3.github.io/colorDF/
 destination: docs
 template:
   params:
     bootswatch: sandstone
 home:
   links:
-  - text: View on CRAN
-    href: https://CRAN.R-project.org/package=colorDF
   - text: View on github
     href: https://github.com/january3/colorDF/
 reference:

@@ -1,4 +1,7 @@
-# colorDF - Colored table output in R terminal
+
+# colorDF <a href="https://january3.github.io/colorDF/"><img src="man/figures/logo.svg" align="right" height="139" /></a>
+
+## Colored table output in R terminal
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/january3/colorDF/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/january3/colorDF/actions/workflows/R-CMD-check.yaml)
