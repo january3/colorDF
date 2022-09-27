@@ -5,7 +5,6 @@
 }
 
 .graphic_summary <- function(x, summary, digits, width) {
-
   sel <- map_lgl(x, ~ is.numeric(.) & !all(is.na(.))) #& map_lgl(x, ~ !all(is.na(.)))
   uq_vals <- map_lgl(x, ~ length(unique(.)) > 1)
   sel <- sel & uq_vals
@@ -22,12 +21,12 @@
     .x <- quantile(.x, na.rm=TRUE)
   .x <- round((.x - r[1])/(r[2] - r[1]) * (width-1)) + 1
     chrs <- rep(" ", width)
-    chrs[.x[1]:.x[5]] <- "\u2500"
+    chrs[.x[1]:.x[5]] <- .colorDF_chars$dash
     #chrs[.x[1]:.x[5]] <- "-"
     #chrs[.x[1]] <- "\u251C"
     #chrs[.x[5]] <- "\u2524"
-    chrs[.x[1]] <- "\u257E"
-    chrs[.x[5]] <- "\u257C"
+    chrs[.x[1]] <- .colorDF_chars$heavy_left
+    chrs[.x[5]] <- .colorDF_chars$heavy_right
 
     #chrs[.x[c(1,5)]] <- "|"
     #chrs[.x[2]:.x[4]] <- "\u2587"
@@ -35,11 +34,9 @@
     #chrs[.x[2]:.x[4]] <- "\u2B1B"
     #chrs[.x[2]:.x[4]] <- "="
     chrs[.x[2]:.x[4]] <- " "
-    chrs[.x[2]] <- "["
     #chrs[.x[2]] <- "\u25D6"
-    chrs[.x[4]] <- "]"
-    chrs[.x[2]] <- "\u2524"
-    chrs[.x[4]] <- "\u251C"
+    chrs[.x[2]] <- .colorDF_chars$box_left
+    chrs[.x[4]] <- .colorDF_chars$box_right
     #chrs[.x[4]] <- "\u25D7"
     #chrs[.x[3]] <- "\u26AB"
     #chrs[.x[3]] <- "\u253C"
@@ -72,7 +69,7 @@
       qq[1], qq[2], qq[3], qq[4], qq[5])
   } else if(numformat == "mean") {
     nm <- format(c(mean(x, na.rm=TRUE), sd(x, na.rm=TRUE)), digits=digits)
-    ret <- sprintf("%s \u00B1 %s", nm[1], nm[2])
+    ret <- sprintf("%s %s %s", nm[1], .colorDF_chars$pmin, nm[2])
   } else {
     ret <- NA
   }
@@ -95,7 +92,7 @@
 
   ret <- paste(paste0(nt, ": ", t), collapse=", ")
   if(nchar(ret) > width) {
-    ret <- paste0(substr(ret, 1, width - 1), "\u2026")
+    ret <- paste0(substr(ret, 1, width - 1), .colorDF_chars$ellipsis)
   }
   return(ret)
 }
@@ -211,6 +208,7 @@ summary_colorDF <- function(object, numformat="quantiles", digits=3, width=getOp
 
   #modal <- map2_chr(x, uniq, ~ if(.y == nr) { "N/A" } else {names(table(.))[1]})
   summary <- map2_chr(x, classes, .get_summary, numformat=numformat, digits=digits, width=width)
+
 
   if(numformat == "graphics") {
     summary <- .graphic_summary(x, summary, digits, width)

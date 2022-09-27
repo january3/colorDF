@@ -4,8 +4,10 @@ template:
     bootswatch: sandstone
 home:
   links:
-  - text: CRAN page
+  - text: View on CRAN
     href: https://CRAN.R-project.org/package=colorDF
+  - text: View on github
+    href: https://github.com/january3/colorDF/
 reference:
   - title: "The colorDF class"      
   - contents:

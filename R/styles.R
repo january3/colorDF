@@ -64,7 +64,7 @@ format_col <- function(x, col_name=NULL, style=NULL, df_style=NULL, format=TRUE,
 
   if(format) { 
     sel <- nchar(x.ret) > col_width
-    x.ret[sel] <- paste0(substr(x.ret[sel], 1, col_width - 1), "\u2026")
+    x.ret[sel] <- paste0(substr(x.ret[sel], 1, col_width - 1), .colorDF_chars$ellipsis)
     x.ret <- col_align(x.ret, width=col_width, align=style$align) 
   }
 

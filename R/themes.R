@@ -4,7 +4,7 @@
 
   light= list(
     description = "Suitable for black on white terminals",
-    sep         = "\u2502",
+    sep         = .colorDF_chars$sep,
     id         = "light",
     digits     = 2,
     fg_na      = "grey50",
@@ -37,7 +37,7 @@
 
   universal = list(
     description = "Suitable for all terminals",
-    sep         = "\u2502",
+    sep         = .colorDF_chars$sep,
     id          = "universal",
     digits     = 2,
     fg_na      = "grey20",
@@ -78,7 +78,7 @@
 
   dark=list(
     description = "Suitable for white on black terminals",
-    sep         = "\u2502",
+    sep         = .colorDF_chars$sep,
     id         = "dark",
     digits     = 2,
     fg_na      = "grey50",
@@ -104,7 +104,7 @@
   bw=list(
     description = "Black and white only. Suitable for black on white terminals",
     terminal   = "light",
-    sep         = "\u2502",
+    sep         = .colorDF_chars$sep,
     id          = "bw",
     digits     = 2,
     fg_na      = "grey20",
@@ -129,7 +129,7 @@
   wb=list(
     description = "Black and white only. Suitable for white on black terminals",
     terminal   = "dark",
-    sep         = "\u2502",
+    sep         = .colorDF_chars$sep,
     id          = "wb",
     digits     = 2,
     fg_na      = "grey80",

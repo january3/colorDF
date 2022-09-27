@@ -1,10 +1,18 @@
 .getslots <- function(x, width) {
 
   cols.w <- map_int(1:length(x), ~  max(nchar(strip_style(x[[.x]]))))
+  if(any(toolarge <- cols.w > width)) {
+    warning("There is a problem with column width. Possibly problem with encoding.")
+    cols.w[toolarge] <- width - 1
+  }
 
   #cols.w <- cols.w + 1
   slots <- rep(0, length(cols.w))
   screen <- cumsum(cols.w) 
+  
+  # total number of slots
+  # a slot is a chunk of the output, columns are split by slots such that
+  # each chunk does not exceed column width
   nsl <- 1
 
   while(any(screen > 0)) {
@@ -12,6 +20,9 @@
     slots[sel] <- nsl
     screen <- screen - max(screen[sel])
     nsl <- nsl + 1
+
+    # at most 10 slots are shown
+    if(nsl > 10) break;
   }
 
   return(slots)
@@ -288,6 +299,7 @@ print_colorDF <- function(x,
   bg=NULL,
   fg=NULL,
   ...) {
+
 
   name <- "Data frame (class data.frame)"
   if(inherits(x, "tmodReport")) {
